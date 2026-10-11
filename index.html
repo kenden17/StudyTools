@@ -899,6 +899,45 @@
     }
 
     /* =========================================================
+
+    /* =========================================================
+       COUNTDOWN PANEL
+    ========================================================= */
+    .cd-clock-box {
+      background: var(--surface2); border-radius: 12px; padding: 16px 18px;
+      display: flex; flex-direction: column; gap: 4px;
+      border: 1.5px solid var(--border);
+    }
+    .cd-clock-label { font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--muted); }
+    .cd-clock-time {
+      font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums;
+      letter-spacing: -.01em;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cd-custom-item {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface2); border-radius: 10px; padding: 12px 14px;
+      border-left: 3px solid var(--accent);
+    }
+    .cd-custom-emoji { font-size: 1.4rem; flex-shrink: 0; }
+    .cd-custom-days  { font-size: 1.6rem; font-weight: 900; min-width: 50px;
+      font-variant-numeric: tabular-nums; line-height: 1; }
+    .cd-custom-days.urgent { color: var(--red); }
+    .cd-custom-days.soon   { color: var(--orange); }
+    .cd-custom-days.ok     { color: var(--green); }
+    .cd-custom-del { background: none; border: none; color: var(--muted);
+      font-size: 1rem; padding: 4px; min-width: 32px; min-height: 32px;
+      margin-left: auto; flex-shrink: 0; }
+    .cd-custom-del:hover { color: var(--red); }
+    .cd-section-divider {
+      font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .09em; color: var(--muted); padding: 4px 0 2px;
+      border-bottom: 1px solid var(--border); margin-bottom: 4px;
+    }
+
        SCROLLBAR
     ========================================================= */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -989,17 +1028,7 @@
     <button class="nav-link" data-panel="timer">Timer</button>
     <button class="nav-link" data-panel="todo">To-Do</button>
     <button class="nav-link" data-panel="notes">Notes</button>
-    <div class="nav-dropdown" id="navMoreDropdown">
-      <button class="nav-dropdown-btn" id="navMoreBtn" aria-haspopup="true" aria-expanded="false">More ▾</button>
-      <div class="nav-dropdown-menu" role="menu">
-        <button class="nav-dropdown-item" data-panel="tips"      role="menuitem">Study Tips</button>
-        <button class="nav-dropdown-item" data-panel="essay"     role="menuitem">Essay Outline</button>
-        <button class="nav-dropdown-item" data-panel="formulas"  role="menuitem">Formulas</button>
-        <button class="nav-dropdown-item" data-panel="converter" role="menuitem">Unit Converter</button>
-        <button class="nav-dropdown-item" data-panel="periodic"  role="menuitem">Periodic Table</button>
-        <button class="nav-dropdown-item" data-panel="links"     role="menuitem">Canvas / Skyward</button>
-      </div>
-    </div>
+    <button class="nav-link" data-panel="countdown">Countdowns</button>
   </div>
   <div class="nav-right">
     <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
@@ -1066,6 +1095,9 @@
       <button class="more-sheet-btn" data-panel="links">
         <span class="more-sheet-icon">🔗</span> Portals
       </button>
+      <button class="more-sheet-btn" data-panel="countdown">
+        <span class="more-sheet-icon">⏳</span> Countdowns
+      </button>
     </div>
   </div>
 </div>
@@ -1103,7 +1135,7 @@
 
     <!-- AP Exam Countdown Card -->
     <div class="dash-card">
-      <div class="dash-card-title">⏳ AP Exam Countdown — 2026</div>
+      <div class="dash-card-title">⏳ AP Exam Countdown — 2027</div>
       <p style="font-size:.75rem;color:var(--muted);margin-top:-8px;">Click any exam to open its study guide.</p>
       <div class="countdown-list" id="countdownList"></div>
     </div>
@@ -1543,6 +1575,91 @@
   </div>
 </div>
 
+
+<!-- COUNTDOWNS -->
+<div class="page-panel" id="panel-countdown">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">⏳ <span>Countdowns</span></div>
+      <div class="panel-hero-sub">AP exams, school milestones, and your own custom countdowns — all in one place</div>
+    </div>
+  </div>
+  <div class="panel-inner wide">
+
+    <!-- ── AP EXAM COUNTDOWNS ── -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+        <div>
+          <div class="card-title">📝 AP Exams 2027</div>
+          <div class="card-subtitle">Tap any exam to open its study guide</div>
+        </div>
+        <div id="cdNextBadge" style="background:var(--accent);color:#fff;border-radius:8px;padding:6px 14px;font-size:.82rem;font-weight:700;white-space:nowrap;"></div>
+      </div>
+      <div class="countdown-list" id="cdApList" style="max-height:420px;overflow-y:auto;"></div>
+    </div>
+
+    <!-- ── SCHOOL YEAR MILESTONES ── -->
+    <div class="card">
+      <div class="card-title">🏫 School Year 2026–27</div>
+      <div class="card-subtitle">Key CHS dates</div>
+      <div class="countdown-list" id="cdSchoolList"></div>
+    </div>
+
+    <!-- ── CUSTOM COUNTDOWNS ── -->
+    <div class="card">
+      <div class="card-title">➕ Custom Countdown</div>
+      <div class="card-subtitle">Add any event you want to track</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;">
+          <input type="text" id="cdCustomName" placeholder="Event name (e.g. Prom, SAT, Vacation…)" maxlength="60" />
+          <input type="date" id="cdCustomDate" style="width:160px;" />
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <select id="cdCustomEmoji" style="width:90px;">
+            <option value="🎉">🎉 Party</option>
+            <option value="📅">📅 Event</option>
+            <option value="✈️">✈️ Travel</option>
+            <option value="🎓">🎓 School</option>
+            <option value="📝">📝 Test</option>
+            <option value="🏆">🏆 Sports</option>
+            <option value="❤️">❤️ Special</option>
+            <option value="🎂">🎂 Birthday</option>
+            <option value="🌙">🌙 Break</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="cdAddCustom()" style="flex:1;">Add Countdown</button>
+        </div>
+      </div>
+      <div class="countdown-list" id="cdCustomList"></div>
+      <div id="cdCustomEmpty" style="text-align:center;color:var(--muted);font-size:.85rem;padding:16px 0;">No custom countdowns yet</div>
+    </div>
+
+    <!-- ── LIVE CLOCKS ── -->
+    <div class="card">
+      <div class="card-title">🕐 Live Clocks</div>
+      <div class="card-subtitle">Real-time — updates every second</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
+        <div class="cd-clock-box">
+          <div class="cd-clock-label">Local Time</div>
+          <div class="cd-clock-time" id="cdClockLocal">--:--:--</div>
+        </div>
+        <div class="cd-clock-box">
+          <div class="cd-clock-label">Time Until Midnight</div>
+          <div class="cd-clock-time" id="cdClockMidnight">--:--:--</div>
+        </div>
+        <div class="cd-clock-box">
+          <div class="cd-clock-label">Day of Year</div>
+          <div class="cd-clock-time" id="cdClockDoy" style="font-size:1.8rem;">---</div>
+        </div>
+        <div class="cd-clock-box">
+          <div class="cd-clock-label">Week of Year</div>
+          <div class="cd-clock-time" id="cdClockWoy" style="font-size:1.8rem;">---</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <footer>
   CHS Study Tools · Cedarburg Bulldogs 🐾 · Free &amp; private · No account needed ·
   <button style="background:none;border:none;color:var(--accent);font-size:.8rem;cursor:pointer;font-family:inherit;" onclick="showPanel('home')">Home</button>
@@ -1555,7 +1672,6 @@
 function showPanel(id) {
   document.querySelectorAll('.page-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  document.querySelectorAll('.nav-dropdown-item').forEach(l => l.classList.remove('active'));
   const panel = document.getElementById('panel-' + id);
   if (panel) panel.classList.add('active');
   const link = document.querySelector('.nav-link[data-panel="' + id + '"]');
@@ -1563,14 +1679,10 @@ function showPanel(id) {
     link.classList.add('active');
     link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
-  const dropLink = document.querySelector('.nav-dropdown-item[data-panel="' + id + '"]');
-  if (dropLink) dropLink.classList.add('active');
   // Update bottom tab bar active state
   document.querySelectorAll('.tab-btn[data-panel]').forEach(b => b.classList.toggle('active', b.dataset.panel === id));
   // Close more sheet if open
   var ms = document.getElementById('moreSheet'); if(ms) ms.classList.remove('open');
-  // close dropdown
-  document.getElementById('navMoreDropdown').classList.remove('open');
   window.scrollTo(0, 0);
   history.replaceState(null, '', '#' + id);
 }
@@ -1578,24 +1690,6 @@ function showPanel(id) {
 // Wire up nav buttons
 document.querySelectorAll('.nav-link[data-panel]').forEach(btn => {
   btn.addEventListener('click', () => showPanel(btn.dataset.panel));
-});
-document.querySelectorAll('.nav-dropdown-item[data-panel]').forEach(btn => {
-  btn.addEventListener('click', () => showPanel(btn.dataset.panel));
-});
-
-// More dropdown toggle
-const navMoreBtn = document.getElementById('navMoreBtn');
-const navMoreDropdown = document.getElementById('navMoreDropdown');
-navMoreBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  const open = navMoreDropdown.classList.toggle('open');
-  navMoreBtn.setAttribute('aria-expanded', String(open));
-});
-document.addEventListener('click', (e) => {
-  if (!navMoreDropdown.contains(e.target)) {
-    navMoreDropdown.classList.remove('open');
-    navMoreBtn.setAttribute('aria-expanded', 'false');
-  }
 });
 
 // Brand click → home
@@ -2749,21 +2843,21 @@ function initDashboard() {
   document.getElementById('dashDateStr').textContent =
     now.toLocaleDateString('en-US', { weekday:'long', month:'long', year:'numeric' });
 
-  // AP Exam Countdowns — 2026 dates (College Board schedule)
+  // AP Exam Countdown — 2027 dates (College Board schedule)
   const apExams = [
-    { name:'AP Gov & Politics',    date:'2026-05-05', course:'apgov' },
-    { name:'AP English Language',  date:'2026-05-06', course:'aplang' },
-    { name:'AP English Lit',       date:'2026-05-06', course:'aplit' },
-    { name:'AP Chemistry',         date:'2026-05-07', course:'apchem' },
-    { name:'AP U.S. History',      date:'2026-05-08', course:'apush' },
-    { name:'AP Computer Science A',date:'2026-05-09', course:'apcsa' },
-    { name:'AP Calculus AB/BC',    date:'2026-05-11', course:'apcalcab' },
-    { name:'AP Biology',           date:'2026-05-12', course:'apbio' },
-    { name:'AP World History',     date:'2026-05-13', course:'apworld' },
-    { name:'AP Statistics',        date:'2026-05-13', course:'apstats' },
-    { name:'AP Physics 1',         date:'2026-05-14', course:'apphysics1' },
-    { name:'AP Psychology',        date:'2026-05-15', course:'appsych' },
-    { name:'AP Env. Science',      date:'2026-05-04', course:'apes' },
+    { name:'AP Gov & Politics',    date:'2027-05-04', course:'apgov' },
+    { name:'AP English Language',  date:'2027-05-12', course:'aplang' },
+    { name:'AP English Lit',       date:'2027-05-05', course:'aplit' },
+    { name:'AP Chemistry',         date:'2027-05-06', course:'apchem' },
+    { name:'AP U.S. History',      date:'2027-05-07', course:'apush' },
+    { name:'AP Computer Science A',date:'2027-05-12', course:'apcsa' },
+    { name:'AP Calculus AB/BC',    date:'2027-05-10', course:'apcalcab' },
+    { name:'AP Biology',           date:'2027-05-03', course:'apbio' },
+    { name:'AP World History',     date:'2027-05-06', course:'apworld' },
+    { name:'AP Statistics',        date:'2027-05-11', course:'apstats' },
+    { name:'AP Physics 1',         date:'2027-05-05', course:'apphysics1' },
+    { name:'AP Psychology',        date:'2027-05-14', course:'appsych' },
+    { name:'AP Env. Science',      date:'2027-05-13', course:'apes' },
   ].sort((a, b) => { function pd(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);} return pd(a.date)-pd(b.date); });
 
   const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -5002,6 +5096,265 @@ function quizRestart(id) {
 
 initDashboard();
 buildGuidesSidebar();
+
+
+// =========================================================
+// COUNTDOWN PANEL
+// =========================================================
+(function initCountdowns() {
+  // ── helpers ──────────────────────────────────────────────
+  function pd(str) {
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  function daysUntil(date) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    return Math.ceil((date - today) / 86400000);
+  }
+  function urgency(days) {
+    return days <= 7 ? 'urgent' : days <= 30 ? 'soon' : 'ok';
+  }
+  function fmtDate(date) {
+    return date.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+  }
+
+  // ── AP Exam list (same dates as dashboard) ───────────────
+  const apExams = [
+    { name:'AP Env. Science',       date:'2027-05-13', course:'apes' },
+    { name:'AP Gov & Politics',     date:'2027-05-04', course:'apgov' },
+    { name:'AP English Language',   date:'2027-05-12', course:'aplang' },
+    { name:'AP English Lit',        date:'2027-05-05', course:'aplit' },
+    { name:'AP Chemistry',          date:'2027-05-06', course:'apchem' },
+    { name:'AP U.S. History',       date:'2027-05-07', course:'apush' },
+    { name:'AP Computer Science A', date:'2027-05-12', course:'apcsa' },
+    { name:'AP Calculus AB/BC',     date:'2027-05-10', course:'apcalcab' },
+    { name:'AP Biology',            date:'2027-05-03', course:'apbio' },
+    { name:'AP World History',      date:'2027-05-06', course:'apworld' },
+    { name:'AP Statistics',         date:'2027-05-11', course:'apstats' },
+    { name:'AP Physics 1',          date:'2027-05-05', course:'apphysics1' },
+    { name:'AP Psychology',         date:'2027-05-14', course:'appsych' },
+  ];
+
+  // ── School year milestones ────────────────────────────────
+    const schoolDates = [
+      { emoji:'🍎', name:'First Day of School',        date:'2026-09-01' },
+      { emoji:'🦃', name:'Thanksgiving Break',          date:'2026-11-25' },
+      { emoji:'🎄', name:'Winter Break Starts',         date:'2026-12-21' },
+      { emoji:'🏫', name:'Classes Resume',              date:'2027-01-04' },
+      { emoji:'✊',  name:'MLK Day — No School',    date:'2027-01-18' },
+      { emoji:'📋', name:'Semester Exams',              date:'2027-01-20' },
+      { emoji:'🌸', name:'Spring Break',                date:'2027-03-22' },
+      { emoji:'🌱', name:'AP Exams Begin',              date:'2027-05-03' },
+      { emoji:'🎓', name:'Graduation',                  date:'2027-06-06' },
+      { emoji:'📚', name:'Last Day of School',          date:'2027-06-10' },
+      { emoji:'☀️',  name:'Summer',                      date:'2027-06-11' },
+    ];
+
+  // ── Render AP list ────────────────────────────────────────
+  function renderAP() {
+    const el = document.getElementById('cdApList');
+    const badge = document.getElementById('cdNextBadge');
+    if (!el) return;
+
+    const today = new Date(); today.setHours(0,0,0,0);
+    const upcoming = apExams.filter(e => pd(e.date) >= today);
+    const past     = apExams.filter(e => pd(e.date) <  today);
+    const maxDays  = upcoming.length
+      ? Math.ceil((pd(upcoming[upcoming.length-1].date) - today) / 86400000)
+      : 1;
+
+    if (badge && upcoming.length) {
+      const ne = upcoming[0];
+      const ned = daysUntil(pd(ne.date));
+      badge.textContent = ned + ' days · ' + ne.name;
+      badge.style.background = urgency(ned) === 'urgent' ? 'var(--red)' : urgency(ned) === 'soon' ? 'var(--orange)' : 'var(--accent)';
+    }
+
+    let html = '';
+    if (upcoming.length) {
+      upcoming.forEach(e => {
+        const d   = pd(e.date);
+        const days = daysUntil(d);
+        const cls  = urgency(days);
+        const pct  = Math.max(2, 100 - (days / maxDays * 100));
+        const bar  = cls==='urgent' ? 'var(--red)' : cls==='soon' ? 'var(--orange)' : 'var(--green)';
+        html += `
+          <div class="countdown-item" onclick="showGuide('${e.course}')" style="cursor:pointer;" title="Open study guide">
+            <div>
+              <div class="countdown-days ${cls}">${days}</div>
+              <div style="font-size:.55rem;color:var(--muted);text-align:center;">days</div>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div class="countdown-name">${e.name}</div>
+              <div class="countdown-date">${fmtDate(d)}</div>
+              <div class="countdown-bar-wrap" style="margin-top:5px;">
+                <div class="countdown-bar" style="width:${pct}%;background:${bar};"></div>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+    if (past.length) {
+      html += '<div class="cd-section-divider" style="margin-top:10px;">Completed</div>';
+      past.forEach(e => {
+        const d    = pd(e.date);
+        const gone = -daysUntil(d);
+        html += `
+          <div class="countdown-item" style="opacity:.45;">
+            <div>
+              <div class="countdown-days ok" style="font-size:1rem;color:var(--muted);">✓</div>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div class="countdown-name" style="text-decoration:line-through;color:var(--muted);">${e.name}</div>
+              <div class="countdown-date">${fmtDate(d)} · ${gone} days ago</div>
+            </div>
+          </div>`;
+      });
+    }
+    if (!upcoming.length && !past.length) {
+      html = '<div style="text-align:center;color:var(--muted);padding:20px 0;">No exams found</div>';
+    }
+    el.innerHTML = html;
+  }
+
+  // ── Render school milestones ──────────────────────────────
+  function renderSchool() {
+    const el = document.getElementById('cdSchoolList');
+    if (!el) return;
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    let html = '';
+    schoolDates.forEach(e => {
+      const d    = pd(e.date);
+      const days = daysUntil(d);
+      const past = days < 0;
+      const cls  = past ? '' : urgency(days);
+      html += `
+        <div class="countdown-item" style="${past ? 'opacity:.4;' : ''}">
+          <div style="font-size:1.5rem;flex-shrink:0;min-width:36px;text-align:center;">${e.emoji}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="countdown-name" style="${past ? 'text-decoration:line-through;color:var(--muted);' : ''}">${e.name}</div>
+            <div class="countdown-date">${fmtDate(d)}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            ${past
+              ? `<span style="font-size:.75rem;color:var(--muted);">${-days}d ago</span>`
+              : `<span class="countdown-days ${cls}" style="font-size:1.3rem;min-width:unset;">${days}</span>
+                 <div style="font-size:.55rem;color:var(--muted);text-align:center;">days</div>`
+            }
+          </div>
+        </div>`;
+    });
+    el.innerHTML = html;
+  }
+
+  // ── Custom countdowns ─────────────────────────────────────
+  let customCDs = JSON.parse(localStorage.getItem('cd_custom') || '[]');
+
+  function saveCustom() { localStorage.setItem('cd_custom', JSON.stringify(customCDs)); }
+
+  window.cdAddCustom = function() {
+    const name  = document.getElementById('cdCustomName').value.trim();
+    const date  = document.getElementById('cdCustomDate').value;
+    const emoji = document.getElementById('cdCustomEmoji').value;
+    if (!name) { document.getElementById('cdCustomName').focus(); return; }
+    if (!date) { document.getElementById('cdCustomDate').focus(); return; }
+    customCDs.push({ id: Date.now(), name, date, emoji });
+    saveCustom();
+    document.getElementById('cdCustomName').value = '';
+    document.getElementById('cdCustomDate').value = '';
+    renderCustom();
+  };
+
+  window.cdDeleteCustom = function(id) {
+    customCDs = customCDs.filter(c => c.id !== id);
+    saveCustom();
+    renderCustom();
+  };
+
+  function renderCustom() {
+    const el    = document.getElementById('cdCustomList');
+    const empty = document.getElementById('cdCustomEmpty');
+    if (!el) return;
+
+    // Sort by date ascending
+    const sorted = [...customCDs].sort((a,b) => pd(a.date) - pd(b.date));
+
+    if (sorted.length === 0) {
+      el.innerHTML = '';
+      if (empty) empty.style.display = 'block';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+
+    el.innerHTML = sorted.map(c => {
+      const d    = pd(c.date);
+      const days = daysUntil(d);
+      const past = days < 0;
+      const cls  = past ? '' : urgency(days);
+      return `
+        <div class="cd-custom-item" style="${past ? 'opacity:.45;border-left-color:var(--muted);' : ''}">
+          <div class="cd-custom-emoji">${c.emoji}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="countdown-name" style="${past ? 'text-decoration:line-through;color:var(--muted);' : ''}">${c.name.replace(/</g,'&lt;')}</div>
+            <div class="countdown-date">${fmtDate(d)}</div>
+          </div>
+          ${past
+            ? `<div style="font-size:.8rem;color:var(--muted);flex-shrink:0;">${-days}d ago</div>`
+            : `<div style="text-align:right;flex-shrink:0;">
+                <div class="cd-custom-days ${cls}">${days}</div>
+                <div style="font-size:.55rem;color:var(--muted);text-align:center;">days</div>
+               </div>`
+          }
+          <button class="cd-custom-del" onclick="cdDeleteCustom(${c.id})" aria-label="Delete">✕</button>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Live clocks ───────────────────────────────────────────
+  function tickClocks() {
+    const now = new Date();
+    // Local time
+    const localEl = document.getElementById('cdClockLocal');
+    if (localEl) localEl.textContent = now.toLocaleTimeString('en-US', { hour12: false });
+
+    // Time until midnight
+    const midnight = new Date(now); midnight.setHours(24,0,0,0);
+    const diff = midnight - now;
+    const h = String(Math.floor(diff / 3600000)).padStart(2,'0');
+    const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+    const s = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
+    const midEl = document.getElementById('cdClockMidnight');
+    if (midEl) midEl.textContent = `${h}:${m}:${s}`;
+
+    // Day of year
+    const start = new Date(now.getFullYear(), 0, 0);
+    const doy   = Math.floor((now - start) / 86400000);
+    const doyEl = document.getElementById('cdClockDoy');
+    if (doyEl) doyEl.textContent = `${doy} / 365`;
+
+    // Week of year (ISO-ish)
+    const woy  = Math.ceil(doy / 7);
+    const woyEl = document.getElementById('cdClockWoy');
+    if (woyEl) woyEl.textContent = `Wk ${woy}`;
+  }
+
+  // ── Init ──────────────────────────────────────────────────
+  renderAP();
+  renderSchool();
+  renderCustom();
+  tickClocks();
+  setInterval(tickClocks, 1000);
+
+  // Re-render AP + school when panel becomes visible (in case dates have changed)
+  const origShowPanel = window.showPanel;
+  window.showPanel = function(id) {
+    origShowPanel(id);
+    if (id === 'countdown') { renderAP(); renderSchool(); }
+  };
+
+})();
+
 </script>
 </body>
 </html>

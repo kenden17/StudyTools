@@ -1,0 +1,570 @@
+﻿</head>
+<body>
+
+<!-- ===================== TOP NAV ===================== -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <span class="nav-brand" id="navBrand">CHS Study Tools 🐾</span>
+  <!-- Desktop nav links (hidden on mobile via CSS) -->
+  <div class="nav-links">
+    <button class="nav-link" data-panel="guides">Study Guides</button>
+    <button class="nav-link" data-panel="difficulty">Class Guide</button>
+    <button class="nav-link" data-panel="gpa">GPA Calc</button>
+    <button class="nav-link" data-panel="flashcards">Flashcards</button>
+    <button class="nav-link" data-panel="timer">Timer</button>
+    <button class="nav-link" data-panel="todo">To-Do</button>
+    <button class="nav-link" data-panel="notes">Notes</button>
+    <div class="nav-dropdown" id="navMoreDropdown">
+      <button class="nav-dropdown-btn" id="navMoreBtn" aria-haspopup="true" aria-expanded="false">More ▾</button>
+      <div class="nav-dropdown-menu" role="menu">
+        <button class="nav-dropdown-item" data-panel="tips"      role="menuitem">Study Tips</button>
+        <button class="nav-dropdown-item" data-panel="essay"     role="menuitem">Essay Outline</button>
+        <button class="nav-dropdown-item" data-panel="formulas"  role="menuitem">Formulas</button>
+        <button class="nav-dropdown-item" data-panel="converter" role="menuitem">Unit Converter</button>
+        <button class="nav-dropdown-item" data-panel="periodic"  role="menuitem">Periodic Table</button>
+        <button class="nav-dropdown-item" data-panel="links"     role="menuitem">Canvas / Skyward</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </div>
+</nav>
+
+<!-- ===================== BOTTOM TAB BAR (mobile) ===================== -->
+<nav class="tab-bar" role="navigation" aria-label="Bottom navigation">
+  <button class="tab-btn" data-panel="home"       aria-label="Home">
+    <span class="tab-icon">🏠</span><span class="tab-label">Home</span>
+  </button>
+  <button class="tab-btn" data-panel="guides"     aria-label="Study Guides">
+    <span class="tab-icon">📚</span><span class="tab-label">Guides</span>
+  </button>
+  <button class="tab-btn" data-panel="difficulty" aria-label="Class Guide">
+    <span class="tab-icon">🎓</span><span class="tab-label">Classes</span>
+  </button>
+  <button class="tab-btn" data-panel="gpa"        aria-label="GPA Calculator">
+    <span class="tab-icon">📊</span><span class="tab-label">GPA</span>
+  </button>
+  <button class="tab-btn" id="moreTabBtn"         aria-label="More">
+    <span class="tab-icon">⋯</span><span class="tab-label">More</span>
+  </button>
+</nav>
+
+<!-- ===================== MORE SHEET (mobile) ===================== -->
+<div class="more-sheet" id="moreSheet" role="dialog" aria-modal="true" aria-label="More tools">
+  <div class="more-sheet-backdrop" id="moreSheetBackdrop"></div>
+  <div class="more-sheet-panel">
+    <div class="more-sheet-handle"></div>
+    <div class="more-sheet-title">Study Tools</div>
+    <div class="more-sheet-grid">
+      <button class="more-sheet-btn" data-panel="flashcards">
+        <span class="more-sheet-icon">🃏</span> Flashcards
+      </button>
+      <button class="more-sheet-btn" data-panel="timer">
+        <span class="more-sheet-icon">⏱</span> Focus Timer
+      </button>
+      <button class="more-sheet-btn" data-panel="todo">
+        <span class="more-sheet-icon">✅</span> To-Do List
+      </button>
+      <button class="more-sheet-btn" data-panel="notes">
+        <span class="more-sheet-icon">📝</span> Notes
+      </button>
+      <button class="more-sheet-btn" data-panel="tips">
+        <span class="more-sheet-icon">💡</span> Study Tips
+      </button>
+      <button class="more-sheet-btn" data-panel="essay">
+        <span class="more-sheet-icon">✍️</span> Essay Outline
+      </button>
+    </div>
+    <hr class="more-sheet-divider" />
+    <div class="more-sheet-title">Reference</div>
+    <div class="more-sheet-grid">
+      <button class="more-sheet-btn" data-panel="formulas">
+        <span class="more-sheet-icon">📐</span> Formulas
+      </button>
+      <button class="more-sheet-btn" data-panel="converter">
+        <span class="more-sheet-icon">🔢</span> Converter
+      </button>
+      <button class="more-sheet-btn" data-panel="periodic">
+        <span class="more-sheet-icon">⚗️</span> Periodic Table
+      </button>
+      <button class="more-sheet-btn" data-panel="links">
+        <span class="more-sheet-icon">🔗</span> Portals
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PANELS ===================== -->
+
+<!-- HOME -->
+<div class="page-panel" id="panel-home">
+  <div class="dash-grid">
+
+    <!-- Hero -->
+    <div class="dash-hero">
+      <div class="dash-hero-top">
+        <div>
+          <div class="dash-hero-greeting" id="dashGreeting">Good morning, Bulldog.</div>
+          <div class="dash-hero-date" id="dashDateStr"></div>
+        </div>
+        <div class="dash-hero-day">
+          <div class="date-day" id="dashDay"></div>
+          <div class="date-rest" id="dashDateLabel"></div>
+        </div>
+      </div>
+      <div class="dash-next-exam" id="dashNextExam">
+        <div>
+          <div class="dash-next-exam-label">Next AP Exam</div>
+          <div class="dash-next-exam-days" id="dashNextDays">—</div>
+          <div style="font-size:.6rem;opacity:.7;text-align:center;">days</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div class="dash-next-exam-name" id="dashNextName">loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden countdown list for JS -->
+    <div style="display:none;" aria-hidden="true"><div id="countdownList"></div></div>
+
+    <!-- Three primary cards -->
+    <div class="dash-primary">
+
+      <!-- AP Study Guides -->
+      <div class="dash-card">
+        <div class="dash-card-title">AP Study Guides</div>
+        <p style="font-size:.8rem;color:var(--muted);">Tap any course for chapter notes, vocab, and a practice quiz.</p>
+        <div class="guide-pills" id="guidePreviewList"></div>
+        <button class="btn btn-primary btn-sm" onclick="showPanel('guides')" style="align-self:flex-start;">Browse all guides →</button>
+      </div>
+
+      <!-- Class Guide -->
+      <div class="dash-card">
+        <div class="dash-card-title">Class Guide</div>
+        <p style="font-size:.9rem;font-weight:600;line-height:1.45;">Regular · Honors · AP — what to expect at every level.</p>
+        <p style="font-size:.8rem;color:var(--muted);line-height:1.55;">Difficulty ratings, national AP pass rates, and study tips per department.</p>
+        <button class="btn btn-primary" onclick="showPanel('difficulty')" style="margin-top:auto;">Open Class Guide →</button>
+      </div>
+
+      <!-- GPA What-If -->
+      <div class="dash-card">
+        <div class="dash-card-title">What-If GPA Calculator</div>
+        <p style="font-size:.8rem;color:var(--muted);">What grade do you need to hit your target GPA?</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="whatif-row">
+            <label for="wiCurrentGPA">Current GPA</label>
+            <input type="number" id="wiCurrentGPA" placeholder="3.40" step="0.01" min="0" max="5" oninput="calcWhatIf()" />
+          </div>
+          <div class="whatif-row">
+            <label for="wiCredits">Credits so far</label>
+            <input type="number" id="wiCredits" placeholder="12" min="1" oninput="calcWhatIf()" />
+          </div>
+          <div class="whatif-row">
+            <label for="wiNewCredits">New course credits</label>
+            <input type="number" id="wiNewCredits" placeholder="4" min="0.5" step="0.5" oninput="calcWhatIf()" />
+          </div>
+          <div class="whatif-row">
+            <label for="wiTarget">Target GPA</label>
+            <input type="number" id="wiTarget" placeholder="3.70" step="0.01" min="0" max="5" oninput="calcWhatIf()" />
+          </div>
+        </div>
+        <div class="whatif-result" id="whatifResult">
+          <div class="big">—</div>
+          <div class="sub">Fill in the fields above</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tools strip -->
+    <div class="dash-tools-strip">
+      <button class="quick-tool-btn" onclick="showPanel('timer')">
+        <span class="quick-tool-icon">⏱</span><div class="quick-tool-label">Timer</div>
+      </button>
+      <button class="quick-tool-btn" onclick="showPanel('flashcards')">
+        <span class="quick-tool-icon">🃏</span><div class="quick-tool-label">Flashcards</div>
+      </button>
+      <button class="quick-tool-btn" onclick="showPanel('todo')">
+        <span class="quick-tool-icon">✅</span><div class="quick-tool-label">To-Do</div>
+      </button>
+      <button class="quick-tool-btn" onclick="showPanel('notes')">
+        <span class="quick-tool-icon">📝</span><div class="quick-tool-label">Notes</div>
+      </button>
+      <button class="quick-tool-btn" onclick="showPanel('essay')">
+        <span class="quick-tool-icon">✍️</span><div class="quick-tool-label">Essay</div>
+      </button>
+      <button class="quick-tool-btn" onclick="showPanel('formulas')">
+        <span class="quick-tool-icon">📐</span><div class="quick-tool-label">Formulas</div>
+      </button>
+      <button class="quick-tool-btn" onclick="showPanel('converter')">
+        <span class="quick-tool-icon">🔢</span><div class="quick-tool-label">Converter</div>
+      </button>
+      <button class="quick-tool-btn" onclick="showPanel('periodic')">
+        <span class="quick-tool-icon">⚗️</span><div class="quick-tool-label">Periodic</div>
+      </button>
+    </div>
+
+    <!-- Tip of the Day -->
+    <div class="dash-card">
+      <div class="dash-card-title">Tip of the Day</div>
+      <div class="tip-of-day" id="tipOfDay"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- AP STUDY GUIDES -->
+<div class="page-panel" id="panel-guides">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">AP Study Guides</div>
+      <div class="panel-hero-sub">Chapter notes, vocab, exam tips &amp; practice quizzes for every CHS AP course</div>
+    </div>
+  </div>
+  <div class="guides-layout">
+    <div class="guides-sidebar" id="guidesSidebar">
+      <div class="guides-sidebar-search">
+        <input type="text" id="guidesSearch" placeholder="Search courses…" oninput="guidesFilter()" />
+      </div>
+      <div id="guidesCourseList"></div>
+    </div>
+    <div class="guides-content" id="guidesContent">
+      <div class="guides-placeholder">
+        <h3>Select a course</h3>
+        <p>Choose an AP course above to open its chapter-by-chapter study guide.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STUDY TIPS -->
+<div class="page-panel" id="panel-tips">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Study Tips</div>
+      <div class="panel-hero-sub">66 tips across 6 categories</div>
+    </div>
+  </div>
+  <div class="panel-inner full">
+    <section class="card tips-card" aria-label="Study Tips">
+      <div class="tips-top"><div class="tips-cat-tabs" id="tipsCatTabs"></div></div>
+      <div class="tips-grid" id="tipsGrid"></div>
+    </section>
+  </div>
+</div>
+
+<!-- CANVAS / SKYWARD -->
+<div class="page-panel" id="panel-links">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">CHS Portals</div>
+      <div class="panel-hero-sub">One tap to Canvas, Skyward, and more</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="links" aria-label="Quick Links">
+      <div class="qlinks-grid">
+        <a class="qlink" href="https://cedarburg.instructure.com" target="_blank" rel="noopener">
+          <div class="qlink-icon" style="background:#e8650a;">🖥️</div>
+          <div class="qlink-text"><div class="qlink-label">Canvas LMS</div><div class="qlink-sub">Assignments &amp; grades</div></div>
+        </a>
+        <a class="qlink" href="https://cedarburg.powerschool.com/public/home.html" target="_blank" rel="noopener">
+          <div class="qlink-icon" style="background:#1d6fb5;">📋</div>
+          <div class="qlink-text"><div class="qlink-label">Skyward</div><div class="qlink-sub">Grades &amp; attendance</div></div>
+        </a>
+        <a class="qlink" href="https://www.cedarburg.k12.wi.us" target="_blank" rel="noopener">
+          <div class="qlink-icon" style="background:#10b981;">🏫</div>
+          <div class="qlink-text"><div class="qlink-label">CHS Website</div><div class="qlink-sub">School info &amp; news</div></div>
+        </a>
+        <a class="qlink" href="https://drive.google.com" target="_blank" rel="noopener">
+          <div class="qlink-icon" style="background:#f59e0b;">📁</div>
+          <div class="qlink-text"><div class="qlink-label">Google Drive</div><div class="qlink-sub">Your files</div></div>
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- CLASS GUIDE -->
+<div class="page-panel" id="panel-difficulty">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Class Guide</div>
+      <div class="panel-hero-sub">Regular · Honors · AP — what to expect and how to pass</div>
+    </div>
+  </div>
+  <div class="panel-inner wide">
+    <section class="card" id="difficulty" aria-label="Class Difficulty Guide">
+      <div class="diff-tabs" id="diffTabs"></div>
+      <div id="diffPanels"></div>
+    </section>
+  </div>
+</div>
+
+<!-- GPA CALCULATOR -->
+<div class="page-panel" id="panel-gpa">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">GPA Calculator</div>
+      <div class="panel-hero-sub">Weighted 5.0 scale · AP adds +1.0 · Honors = Regular at CHS</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="gpa" aria-label="GPA Calculator">
+      <div class="gpa-result">
+        <div class="gpa-val" id="gpaVal">—</div>
+        <div class="gpa-label">Cumulative GPA (5.0 scale)</div>
+      </div>
+      <div class="gpa-rows" id="gpaRows"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary btn-sm" onclick="gpaAddRow()">+ Add Course</button>
+        <button class="btn btn-ghost btn-sm" onclick="gpaCalc()">Calculate</button>
+      </div>
+      <div style="font-size:.78rem;color:var(--muted);line-height:1.7;">
+        A=4.0 · B=3.0 · C=2.0 · D=1.0 · F=0<br>Honors = same as Regular · AP/IB adds +1.0 (max 5.0)
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- TIMER -->
+<div class="page-panel" id="panel-timer">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Focus Timer</div>
+      <div class="panel-hero-sub">Pomodoro — work in focused bursts, rest in between</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="pomodoro" aria-label="Pomodoro Timer">
+      <div class="pomo-display">
+        <div class="pomo-mode" id="pomoMode">Focus</div>
+        <div class="pomo-time" id="pomoTime">25:00</div>
+        <div class="pomo-sessions" id="pomoSessions">Session 1 of 4</div>
+      </div>
+      <div class="pomo-bar-wrap">
+        <div class="pomo-bar" id="pomoBar" style="width:100%"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary btn-full" id="pomoStart" onclick="pomoToggle()">▶ Start</button>
+        <button class="btn btn-ghost" onclick="pomoReset()">↺ Reset</button>
+      </div>
+      <div class="pomo-settings">
+        <div>
+          <label for="pomoFocusMin">Focus (min)</label>
+          <input type="number" id="pomoFocusMin" value="25" min="1" max="60" oninput="pomoReset()" />
+        </div>
+        <div>
+          <label for="pomoBreakMin">Break (min)</label>
+          <input type="number" id="pomoBreakMin" value="5" min="1" max="30" oninput="pomoReset()" />
+        </div>
+        <div>
+          <label for="pomoSessions4">Sessions</label>
+          <input type="number" id="pomoSessions4" value="4" min="1" max="12" oninput="pomoReset()" />
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- FLASHCARDS -->
+<div class="page-panel" id="panel-flashcards">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Flashcards</div>
+      <div class="panel-hero-sub">Make your own deck, tap to flip</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="flashcards" aria-label="Flashcard Maker">
+      <div class="fc-scene" id="fcScene" role="button" aria-label="Flip card" tabindex="0"
+           onclick="fcFlip()" onkeydown="if(event.key==='Enter'||event.key===' ')fcFlip()">
+        <div class="fc-card" id="fcCard">
+          <div class="fc-face fc-front" id="fcFront">Tap "+ Add a card" below to get started</div>
+          <div class="fc-face fc-back"  id="fcBack">Answer side</div>
+        </div>
+      </div>
+      <p class="fc-hint">Tap card to flip · Use arrows to navigate</p>
+      <div class="fc-nav">
+        <button class="btn btn-ghost btn-sm" onclick="fcPrev()">← Prev</button>
+        <span class="fc-counter" id="fcCounter">0 / 0</span>
+        <button class="btn btn-ghost btn-sm" onclick="fcNext()">Next →</button>
+      </div>
+      <details>
+        <summary style="cursor:pointer;font-size:.88rem;font-weight:600;color:var(--accent);user-select:none;padding:4px 0;">+ Add a card</summary>
+        <div class="fc-add" style="margin-top:12px;">
+          <input type="text" id="fcQuestion" placeholder="Question / term" />
+          <textarea id="fcAnswer" placeholder="Answer / definition" rows="3"></textarea>
+          <div class="fc-add-row">
+            <button class="btn btn-primary btn-sm" onclick="fcAdd()">Add Card</button>
+            <button class="btn btn-ghost btn-sm" onclick="fcClear()">Clear All</button>
+          </div>
+        </div>
+      </details>
+      <div class="fc-list" id="fcList"></div>
+    </section>
+  </div>
+</div>
+
+<!-- TO-DO -->
+<div class="page-panel" id="panel-todo">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">To-Do List</div>
+      <div class="panel-hero-sub">Session only — cleared when you close the tab</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="todo" aria-label="To-Do List">
+      <div class="todo-input-row">
+        <input type="text" id="todoInput" placeholder="Add a task…" onkeydown="if(event.key==='Enter')todoAdd()" />
+        <select id="todoPriority" style="width:auto;flex-shrink:0;">
+          <option value="normal">Normal</option>
+          <option value="high">🔴 High</option>
+          <option value="low">🔵 Low</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="todoAdd()">Add</button>
+      </div>
+      <div id="todoList" class="todo-list"></div>
+      <div class="todo-footer">
+        <span id="todoCount" class="word-count">0 tasks</span>
+        <button class="btn btn-ghost btn-sm" onclick="todoClearDone()">Clear done</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="page-panel" id="panel-notes">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Scratch Notes</div>
+      <div class="panel-hero-sub">Temporary scratchpad — nothing is saved</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="notes" aria-label="Scratch Notepad">
+      <textarea id="scratchPad"
+        placeholder="Jot down anything — notes, vocab, equations…&#10;&#10;Clears when you close the tab."
+        style="min-height:320px;resize:vertical;width:100%;font-size:.9rem;line-height:1.65;"
+        oninput="noteCount()"></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <span class="word-count" id="noteWordCount">Words: 0 · Chars: 0</span>
+        <div class="btn-row">
+          <button class="btn btn-ghost btn-sm" onclick="noteCopy()">📋 Copy</button>
+          <button class="btn btn-ghost btn-sm" onclick="noteClear()">🗑 Clear</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ESSAY OUTLINE -->
+<div class="page-panel" id="panel-essay">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Essay Outline</div>
+      <div class="panel-hero-sub">5-paragraph structure — hook, thesis, body, conclusion</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="essay" aria-label="Essay Outline Builder">
+      <div class="outline-section">
+        <div class="outline-label">Introduction</div>
+        <div class="outline-block">
+          <div class="outline-title">🎣 Hook</div>
+          <textarea id="essayHook" placeholder="Start with an interesting question, fact, or anecdote..." rows="2" oninput="essayCount()"></textarea>
+        </div>
+        <div class="outline-block">
+          <div class="outline-title">📌 Thesis Statement</div>
+          <textarea id="essayThesis" placeholder="Your main argument in one clear sentence..." rows="2" oninput="essayCount()"></textarea>
+        </div>
+      </div>
+      <div class="outline-divider">Body Paragraphs</div>
+      <div id="essayBodies"></div>
+      <div class="outline-section">
+        <div class="outline-label">Conclusion</div>
+        <div class="outline-block green">
+          <div class="outline-title">🔁 Restate Thesis</div>
+          <textarea id="essayConc" placeholder="Restate your thesis in different words..." rows="2" oninput="essayCount()"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <span class="word-count" id="essayWordCount">Words: 0</span>
+        <div class="btn-row">
+          <button class="btn btn-ghost btn-sm" onclick="essayAddBody()">+ Body Para</button>
+          <button class="btn btn-ghost btn-sm" onclick="essayCopy()">📋 Copy Outline</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- FORMULAS -->
+<div class="page-panel" id="panel-formulas">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Formula Reference</div>
+      <div class="panel-hero-sub">Algebra · Geometry · Trig · Physics · Chemistry</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="formulas" aria-label="Formula Reference">
+      <div class="formula-tabs" id="formulaTabs"></div>
+      <div id="formulaLists"></div>
+    </section>
+  </div>
+</div>
+
+<!-- CONVERTER -->
+<div class="page-panel" id="panel-converter">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Unit Converter</div>
+      <div class="panel-hero-sub">Length · Mass · Temperature · Time · Area · Speed</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+    <section class="card" id="converter" aria-label="Unit Converter">
+      <div class="conv-tabs" id="convTabs"></div>
+      <div class="conv-fields">
+        <div>
+          <label id="convFromLabel" for="convFrom">From</label>
+          <input type="number" id="convFrom" placeholder="Value" oninput="convCalc()" />
+          <select id="convFromUnit" style="margin-top:8px;" onchange="convCalc()"></select>
+        </div>
+        <div class="conv-arrow">⇅</div>
+        <div>
+          <label id="convToLabel" for="convTo">To</label>
+          <input type="number" id="convTo" placeholder="Result" readonly style="background:var(--surface);cursor:default;" />
+          <select id="convToUnit" style="margin-top:8px;" onchange="convCalc()"></select>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="convSwap()">⇄ Swap units</button>
+    </section>
+  </div>
+</div>
+
+<!-- PERIODIC TABLE -->
+<div class="page-panel" id="panel-periodic">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">Periodic Table</div>
+      <div class="panel-hero-sub">All 118 elements — tap any element for details</div>
+    </div>
+  </div>
+  <div class="panel-inner full">
+    <section class="card" id="periodic" aria-label="Periodic Table Reference">
+      <input type="text" class="pt-search" id="ptSearch" placeholder="🔍 Search by name or symbol…" oninput="ptFilter()" />
+      <div class="pt-grid" id="ptGrid"></div>
+      <div class="pt-legend" id="ptLegend"></div>
+      <div class="pt-detail" id="ptDetail"></div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  CHS Study Tools · Cedarburg Bulldogs 🐾 · Free &amp; private · No account needed ·
+  <button style="background:none;border:none;color:var(--accent);font-size:.8rem;cursor:pointer;font-family:inherit;" onclick="showPanel('home')">Home</button>
+</footer>
+

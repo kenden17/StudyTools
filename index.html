@@ -1100,9 +1100,13 @@
       </div>
     </div>
 
-    <!-- Hidden countdown list for JS -->
-    <div style="display:none;" aria-hidden="true"><div id="countdownList"></div></div>
 
+    <!-- AP Exam Countdown Card -->
+    <div class="dash-card">
+      <div class="dash-card-title">⏳ AP Exam Countdown — 2026</div>
+      <p style="font-size:.75rem;color:var(--muted);margin-top:-8px;">Click any exam to open its study guide.</p>
+      <div class="countdown-list" id="countdownList"></div>
+    </div>
     <!-- Three primary cards -->
     <div class="dash-primary">
 
@@ -2730,6 +2734,12 @@ ptBuild();
 // DASHBOARD INIT
 // =========================================================
 function initDashboard() {
+  // Parse YYYY-MM-DD as local midnight (not UTC) to avoid off-by-one day in US timezones
+  function parseLocalDate(str) {
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
   // Greeting + date
   const now = new Date();
   const hour = now.getHours();
@@ -2741,63 +2751,76 @@ function initDashboard() {
 
   // AP Exam Countdowns — 2026 dates (College Board schedule)
   const apExams = [
-    { name:'AP English Language', date:'2026-05-06', course:'aplang' },
-    { name:'AP Calculus AB/BC',   date:'2026-05-11', course:'apcalcab' },
-    { name:'AP U.S. History',     date:'2026-05-08', course:'apush' },
-    { name:'AP Biology',          date:'2026-05-12', course:'apbio' },
-    { name:'AP Chemistry',        date:'2026-05-07', course:'apchem' },
-    { name:'AP Physics 1',        date:'2026-05-14', course:'apphysics1' },
-    { name:'AP Psychology',       date:'2026-05-15', course:'appsych' },
-    { name:'AP World History',    date:'2026-05-13', course:'apworld' },
-    { name:'AP Computer Science A',date:'2026-05-09',course:'apcsa' },
-    { name:'AP Statistics',       date:'2026-05-13', course:'apstats' },
-    { name:'AP Gov & Politics',   date:'2026-05-05', course:'apgov' },
-    { name:'AP Env. Science',     date:'2026-05-04', course:'apes' },
-    { name:'AP English Lit',      date:'2026-05-06', course:'aplit' },
-  ].sort((a,b) => new Date(a.date)-new Date(b.date));
+    { name:'AP Gov & Politics',    date:'2026-05-05', course:'apgov' },
+    { name:'AP English Language',  date:'2026-05-06', course:'aplang' },
+    { name:'AP English Lit',       date:'2026-05-06', course:'aplit' },
+    { name:'AP Chemistry',         date:'2026-05-07', course:'apchem' },
+    { name:'AP U.S. History',      date:'2026-05-08', course:'apush' },
+    { name:'AP Computer Science A',date:'2026-05-09', course:'apcsa' },
+    { name:'AP Calculus AB/BC',    date:'2026-05-11', course:'apcalcab' },
+    { name:'AP Biology',           date:'2026-05-12', course:'apbio' },
+    { name:'AP World History',     date:'2026-05-13', course:'apworld' },
+    { name:'AP Statistics',        date:'2026-05-13', course:'apstats' },
+    { name:'AP Physics 1',         date:'2026-05-14', course:'apphysics1' },
+    { name:'AP Psychology',        date:'2026-05-15', course:'appsych' },
+    { name:'AP Env. Science',      date:'2026-05-04', course:'apes' },
+  ].sort((a, b) => { function pd(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);} return pd(a.date)-pd(b.date); });
 
-  const today = new Date(); today.setHours(0,0,0,0);
-  const maxDays = Math.max(...apExams.map(e => Math.ceil((new Date(e.date)-today)/86400000)));
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const upcoming = apExams.filter(e => parseLocalDate(e.date) >= today);
+  const maxDays = upcoming.length > 0
+    ? Math.ceil((parseLocalDate(upcoming[upcoming.length - 1].date) - today) / 86400000)
+    : 365;
+
+  // Render visible countdown list
   const list = document.getElementById('countdownList');
-  list.innerHTML = apExams.map(e => {
-    const d = new Date(e.date);
-    const days = Math.ceil((d - today) / 86400000);
-    if (days < 0) return '';
-    const pct = Math.max(0, 100 - (days / maxDays * 100));
-    const cls = days <= 14 ? 'urgent' : days <= 45 ? 'soon' : 'ok';
-    const dateStr = d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    return `
-      <div class="countdown-item" onclick="showGuide('${e.course}')" style="cursor:pointer;" title="Open ${e.name} study guide">
-        <div>
-          <div class="countdown-days ${cls}">${days}</div>
-          <div style="font-size:.58rem;color:var(--muted);text-align:center;">days</div>
-        </div>
-        <div style="flex:1;min-width:0;">
-          <div class="countdown-name">${e.name}</div>
-          <div class="countdown-date">${dateStr}</div>
-          <div class="countdown-bar-wrap" style="margin-top:5px;">
-            <div class="countdown-bar" style="width:${pct}%;background:${cls==='urgent'?'var(--red)':cls==='soon'?'var(--orange)':'var(--green)'};"></div>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
-
-  // Hero next-exam widget — populate from sorted apExams
-  var upcoming = apExams.filter(function(e){ return Math.ceil((new Date(e.date) - today) / 86400000) >= 0; });
-  if (upcoming.length > 0) {
-    var ne = upcoming[0];
-    var ned = Math.ceil((new Date(ne.date) - today) / 86400000);
-    var herodays = document.getElementById('dashNextDays');
-    var heroname = document.getElementById('dashNextName');
-    if (herodays) { herodays.textContent = ned; herodays.style.color = ned <= 14 ? 'var(--red)' : ned <= 45 ? 'var(--orange)' : 'var(--green)'; }
-    if (heroname) heroname.textContent = ne.name;
+  if (list) {
+    if (upcoming.length === 0) {
+      list.innerHTML = '<div style="font-size:.82rem;color:var(--muted);text-align:center;padding:12px 0;">All 2026 AP exams have passed. Check back next year!</div>';
+    } else {
+      list.innerHTML = upcoming.map(e => {
+        const d = parseLocalDate(e.date);
+        const days = Math.ceil((d - today) / 86400000);
+        const pct = Math.max(2, 100 - (days / maxDays * 100));
+        const cls = days <= 14 ? 'urgent' : days <= 45 ? 'soon' : 'ok';
+        const dateStr = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+        return `
+          <div class="countdown-item" onclick="showGuide('${e.course}')" style="cursor:pointer;" title="Open ${e.name} study guide">
+            <div>
+              <div class="countdown-days ${cls}">${days}</div>
+              <div style="font-size:.55rem;color:var(--muted);text-align:center;margin-top:1px;">days</div>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div class="countdown-name">${e.name}</div>
+              <div class="countdown-date">${dateStr}</div>
+              <div class="countdown-bar-wrap" style="margin-top:5px;">
+                <div class="countdown-bar" style="width:${pct}%;background:${cls==='urgent'?'var(--red)':cls==='soon'?'var(--orange)':'var(--green)'};"></div>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
   }
-  var heroDateLabel = document.getElementById('dashDateLabel');
+
+  // Hero next-exam widget — first upcoming exam
+  const herodays = document.getElementById('dashNextDays');
+  const heroname = document.getElementById('dashNextName');
+  if (upcoming.length > 0) {
+    const ne = upcoming[0];
+    const ned = Math.ceil((parseLocalDate(ne.date) - today) / 86400000);
+    if (herodays) { herodays.textContent = ned; herodays.style.color = ned <= 14 ? 'rgba(255,120,120,1)' : ned <= 45 ? 'rgba(255,210,80,1)' : 'rgba(120,255,180,1)'; }
+    if (heroname) heroname.textContent = ne.name;
+  } else {
+    if (herodays) herodays.textContent = '—';
+    if (heroname) heroname.textContent = 'No upcoming AP exams';
+  }
+
+  const heroDateLabel = document.getElementById('dashDateLabel');
   if (heroDateLabel) heroDateLabel.textContent = now.toLocaleDateString('en-US', { weekday:'short', month:'short' });
 
   // Tip of the day — rotate by day of year
   const allTipFlat = Object.values(tipsData).flat();
-  const doy = Math.floor((now - new Date(now.getFullYear(),0,0)) / 86400000);
+  const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
   const tod = allTipFlat[doy % allTipFlat.length];
   const todEl = document.getElementById('tipOfDay');
   if (todEl && tod) {
@@ -2807,11 +2830,11 @@ function initDashboard() {
   }
 
   // Guide preview list — all courses as pill buttons
-  var previewEl = document.getElementById('guidePreviewList');
+  const previewEl = document.getElementById('guidePreviewList');
   if (previewEl && typeof apGuides !== 'undefined') {
-    var pillsHtml = '';
+    let pillsHtml = '';
     Object.keys(apGuides).forEach(function(key) {
-      var g = apGuides[key];
+      const g = apGuides[key];
       pillsHtml += '<button class="guide-pill" onclick="showGuide(' + JSON.stringify(key) + ')">' + g.title + '</button>';
     });
     previewEl.innerHTML = pillsHtml;

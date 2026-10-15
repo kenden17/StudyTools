@@ -1756,7 +1756,6 @@
   <button style="background:none;border:none;color:var(--accent);font-size:.8rem;cursor:pointer;font-family:inherit;" onclick="showPanel('home')">Home</button>
 </footer>
 
-<script src="guides-data.js"></script>
 <script>
 // =========================================================
 // SPA ROUTER
@@ -3245,7 +3244,31 @@ function quizRestart(id) {
 
 
 initDashboard();
-buildGuidesSidebar();
+
+// Lazy-load guide data only when needed — keeps the page fast on iOS Safari
+let guidesLoaded = false;
+function loadGuides(callback) {
+  if (guidesLoaded) { if (callback) callback(); return; }
+  const s = document.createElement('script');
+  s.src = 'guides-data.js';
+  s.onload = function() {
+    guidesLoaded = true;
+    buildGuidesSidebar();
+    if (callback) callback();
+  };
+  s.onerror = function() { console.error('guides-data.js failed to load'); };
+  document.head.appendChild(s);
+}
+
+// Wire the Guides panel to trigger load on first open
+const _origShowPanel = window.showPanel;
+window.showPanel = function(id) {
+  _origShowPanel(id);
+  if (id === 'guides' && !guidesLoaded) loadGuides();
+};
+
+// Also pre-load silently after 1.5s so it's likely ready before user taps
+setTimeout(function() { loadGuides(); }, 1500);
 
 
 // =========================================================

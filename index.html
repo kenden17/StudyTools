@@ -2544,7 +2544,7 @@ const apClasses = [
   { name: 'AP Psychology', dept: 'Social Studies', passRate: 61.7, difficulty: 2, note: 'Vocabulary-heavy but accessible; popular intro AP' },
   { name: 'AP Macroeconomics', dept: 'Social Studies', passRate: 65.1, difficulty: 2, note: 'Graphs and models; often paired with Micro' },
   // Math
-  { name: 'AP Calculus AB', dept: 'Math', passRate: 64.4, difficulty: 3, note: 'Derivatives, integrals, FTC — prerequisite: Pre-Calc' },
+  { name: 'AP Calculus BC', dept: 'Math', passRate: 64.4, difficulty: 3, note: 'Calc AB + BC topics + series/sequences; higher pass rate because stronger students self-select' },
   { name: 'AP Calculus BC', dept: 'Math', passRate: 80.9, difficulty: 3, note: 'Calc AB + series/sequences; higher pass rate because stronger students self-select' },
   { name: 'AP Statistics', dept: 'Math', passRate: 61.8, difficulty: 2, note: 'Less algebra-heavy; good for non-Calculus track students' },
   { name: 'AP Precalculus', dept: 'Math', passRate: 75.6, difficulty: 2, note: 'Newer AP (2023+); strong bridge to Calculus' },
@@ -3052,8 +3052,9 @@ function initDashboard() {
     { name:'AP Chemistry',         date:'2027-05-06', course:'apchem' },
     { name:'AP U.S. History',      date:'2027-05-07', course:'apush' },
     { name:'AP Computer Science A',date:'2027-05-12', course:'apcsa' },
-    { name:'AP Calculus AB/BC',    date:'2027-05-10', course:'apcalcab' },
+    { name:'AP Calculus BC',    date:'2027-05-10', course:'apcalcbc' },
     { name:'AP Biology',           date:'2027-05-03', course:'apbio' },
+    { name:'AP Human Geography',   date:'2027-05-03', course:'aphug' },
     { name:'AP World History',     date:'2027-05-06', course:'apworld' },
     { name:'AP Statistics',        date:'2027-05-11', course:'apstats' },
     { name:'AP Physics 1',         date:'2027-05-05', course:'apphysics1' },
@@ -3407,8 +3408,9 @@ setTimeout(function() { loadGuides(); }, 1500);
     { name:'AP Chemistry',          date:'2027-05-06', course:'apchem' },
     { name:'AP U.S. History',       date:'2027-05-07', course:'apush' },
     { name:'AP Computer Science A', date:'2027-05-12', course:'apcsa' },
-    { name:'AP Calculus AB/BC',     date:'2027-05-10', course:'apcalcab' },
+    { name:'AP Calculus BC',     date:'2027-05-10', course:'apcalcbc' },
     { name:'AP Biology',            date:'2027-05-03', course:'apbio' },
+    { name:'AP Human Geography',    date:'2027-05-03', course:'aphug' },
     { name:'AP World History',      date:'2027-05-06', course:'apworld' },
     { name:'AP Statistics',         date:'2027-05-11', course:'apstats' },
     { name:'AP Physics 1',          date:'2027-05-05', course:'apphysics1' },
@@ -3644,9 +3646,9 @@ setTimeout(function() { loadGuides(); }, 1500);
   // Course data: key, title, subject, exam info, CB FRQ URL slug, and topic outline
   const printCourses = [
     {
-      key: 'apcalcab', title: 'AP Calculus AB', subject: 'Math',
+      key: 'apcalcbc', title: 'AP Calculus BC', subject: 'Math',
       exam: 'May 2027 · 3 hrs 15 min · 45 MCQ + 6 FRQ',
-      cbSlug: 'ap-calculus-ab',
+      cbSlug: 'ap-calculus-bc',
       units: [
         { name: 'Unit 1: Limits & Continuity', topics: ['Definition of a limit', 'One-sided limits', 'Continuity & discontinuity types', 'Squeeze Theorem', 'Limits at infinity & asymptotes', 'IVT'] },
         { name: 'Unit 2: Differentiation — Definition', topics: ['Limit definition of derivative', 'Power / Product / Quotient rules', 'Chain rule', 'Trig derivatives', 'Differentiability vs continuity'] },
@@ -3827,6 +3829,21 @@ setTimeout(function() { loadGuides(); }, 1500);
         { name: 'Unit 7: Global Change', topics: ['Climate change mechanisms (greenhouse effect)', 'Evidence & consequences of warming', 'International agreements (Kyoto, Paris)', 'Environmental legislation (Clean Air Act, Clean Water Act, ESA, CITES)', 'Sustainability solutions'] },
       ],
       frqTypes: ['FRQ 1: Data analysis (graph/table interpretation + calculation)', 'FRQ 2: Document-based (evaluate proposed solution)', 'FRQ 3: Argument essay (defend or refute an environmental claim)', 'Calculations required: per capita, percent change, energy units'],
+    },
+    {
+      key: 'aphug', title: 'AP Human Geography', subject: 'Social Studies',
+      exam: 'May 2027 · 2 hrs 15 min · 60 MCQ + 3 FRQ',
+      cbSlug: 'ap-human-geography',
+      units: [
+        { name: 'Unit 1: Thinking Geographically', topics: ['Maps & spatial thinking', 'Geographic data & GIS', 'Scale & spatial patterns', 'Geographic models & frameworks'] },
+        { name: 'Unit 2: Population & Migration', topics: ['Population distribution & density', 'Demographic Transition Model (DTM)', 'Malthusian theory', 'Migration push/pull factors', "Ravenstein's laws", 'Refugee & asylum patterns'] },
+        { name: 'Unit 3: Cultural Patterns & Processes', topics: ['Cultural landscapes', 'Language families & diffusion', 'Religion distribution', 'Cultural diffusion types (relocation, expansion)', 'Acculturation & syncretism'] },
+        { name: 'Unit 4: Political Patterns & Processes', topics: ['State, nation, nation-state', 'Sovereignty & territoriality', 'Shapes of states', 'Centripetal vs centrifugal forces', 'Devolution & supranationalism', 'Gerrymandering'] },
+        { name: 'Unit 5: Agriculture & Rural Land Use', topics: ['Agricultural revolutions (1st, 2nd, Green)', 'Von Thünen model', 'Subsistence vs commercial farming', 'GMOs & food security', 'Rural settlement patterns'] },
+        { name: 'Unit 6: Cities & Urban Land Use', topics: ['Site vs situation', 'Urban models (concentric zone, sector, multiple nuclei)', 'Edge cities & suburbanization', 'Bid-rent theory', 'Gentrification & urban renewal', 'Primate cities & rank-size rule'] },
+        { name: 'Unit 7: Industrial & Economic Development', topics: ['Industrial Revolution & deindustrialization', "Rostow's stages of growth", "Wallerstein's world systems theory", 'Core, periphery, semi-periphery', 'Commodity chains & globalization', 'HDI, GDI & development indicators'] },
+      ],
+      frqTypes: ['FRQ 1: Concept Application — apply a geographic model or concept to a scenario', 'FRQ 2: Source Analysis — interpret a map, chart, or image', 'FRQ 3: Argument Essay — defend a geographic claim with evidence', 'Key: always name the specific model/theory by name, not just describe it'],
     },
     {
       key: 'apcsa', title: 'AP Computer Science A', subject: 'CS',

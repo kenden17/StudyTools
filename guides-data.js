@@ -8,9 +8,9 @@ function tips(items)     { return { type:'tips',     items }; }
 function frq(items)      { return { type:'frq',      items }; }
 function quiz(items)     { return { type:'quiz',     items }; }
 const apGuides = {
-  apcalcab: {
-    title: 'AP Calculus AB',
-    exam: 'May 2026 · 3 hrs · MCQ + FRQ',
+  apcalcbc: {
+    title: 'AP Calculus BC',
+    exam: 'May 2027 · 3 hrs 15 min · 45 MCQ + 6 FRQ',
     passRate: '64.4%',
     chapters: [
       makeChapter(1,'Limits & Continuity',[
@@ -236,7 +236,7 @@ const apGuides = {
 
   apbio: {
     title: 'AP Biology',
-    exam: 'May 2026 · 3 hrs · MCQ + FRQ',
+    exam: 'May 2027 · 3 hrs 15 min · 45 MCQ + 6 FRQ',
     passRate: '68.3%',
     chapters: [
       makeChapter(1,'Chemistry of Life',[
@@ -569,7 +569,7 @@ const apGuides = {
 
   apstats: {
     title: 'AP Statistics',
-    exam: 'May 2026 · 3 hrs · MCQ + FRQ',
+    exam: 'May 2027 · 3 hrs 15 min · 45 MCQ + 6 FRQ',
     passRate: '61.8%',
     chapters: [
       makeChapter(1,'Exploring Data',[
@@ -685,7 +685,7 @@ function buildGuidesSidebar() {
     'Science': ['apbio','apchem','apphysics1','apes'],
     'History': ['apush','apworld'],
     'English': ['aplang','aplit'],
-    'Social Studies': ['apgov','appsych'],
+    'Social Studies': ['apgov','appsych','aphug'],
     'Other':   ['apcsa'],
   };
   const hasGuide = Object.keys(apGuides);
@@ -794,7 +794,7 @@ function guidesFilter() {
 function quiz(items){ return { type:'quiz', items }; }
 
 // ── AP Calculus AB ───────────────────────────────────────
-apGuides.apcalcab.chapters[0].sections.push(quiz([
+apGuides.apcalcbc.chapters[0].sections.push(quiz([
   { q:"What does lim(x→c) f(x) = L mean?", opts:["f(c) = L","f(x) gets arbitrarily close to L as x approaches c","The limit exists only if f is continuous","L must equal zero"], ans:1, exp:"A limit describes the value f(x) approaches — f(c) doesn't even need to exist." },
   { q:"For a limit to exist at x = c, the one-sided limits must:", opts:["Both equal f(c)","Both equal each other","Be greater than zero","Equal infinity"], ans:1, exp:"lim(x→c⁻) f(x) must equal lim(x→c⁺) f(x). The function value at c is irrelevant." },
   { q:"A removable discontinuity is best described as:", opts:["A vertical asymptote","A jump in the graph","A hole where the limit exists but ≠ f(c)","A place where both one-sided limits are infinite"], ans:2, exp:"Removable discontinuity = hole. The limit exists at that x-value but either f(c) is undefined or ≠ the limit." },
@@ -807,7 +807,7 @@ apGuides.apcalcab.chapters[0].sections.push(quiz([
   { q:"The Intermediate Value Theorem guarantees that if f is continuous on [a,b] and k is between f(a) and f(b), then:", opts:["f has a maximum at k","f(c) = k for some c in (a,b)","f is differentiable on (a,b)","f(a) = f(b)"], ans:1, exp:"IVT: continuous functions on closed intervals hit every value between their endpoints." }
 ]));
 
-apGuides.apcalcab.chapters[1].sections.push(quiz([
+apGuides.apcalcbc.chapters[1].sections.push(quiz([
   { q:"The derivative f'(x) using the limit definition is:", opts:["lim(h→0)[f(x+h)+f(x)]/h","lim(h→0)[f(x+h)−f(x)]/h","lim(x→0)[f(x+h)−f(x)]/h","[f(b)−f(a)]/(b−a)"], ans:1, exp:"The derivative is defined as lim(h→0)[f(x+h)−f(x)]/h. Both definition forms appear on the exam." },
   { q:"d/dx[x⁵] = ?", opts:["5x⁴","x⁴","5x⁶/6","4x⁵"], ans:0, exp:"Power rule: d/dx[xⁿ] = nxⁿ⁻¹. So d/dx[x⁵] = 5x⁴." },
   { q:"The Product Rule for d/dx[u·v] is:", opts:["u'v'","u'v + uv'","(u'v − uv')/v²","u'+ v'"], ans:1, exp:"Product rule: d/dx[uv] = u'v + uv'. Don't forget both terms." },
@@ -820,7 +820,7 @@ apGuides.apcalcab.chapters[1].sections.push(quiz([
   { q:"d/dx[eˣ] = ?", opts:["xeˣ⁻¹","eˣ·ln(e)","eˣ","e"], ans:2, exp:"d/dx[eˣ] = eˣ. It is the only function equal to its own derivative — a key AP fact." }
 ]));
 
-apGuides.apcalcab.chapters[2].sections.push(quiz([
+apGuides.apcalcbc.chapters[2].sections.push(quiz([
   { q:"To differentiate x² + y² = 25 implicitly, d/dx of y² gives:", opts:["2y","2y·dy/dx","2x","dy/dx"], ans:1, exp:"Every y term gets multiplied by dy/dx via the chain rule. d/dx[y²] = 2y·dy/dx." },
   { q:"d/dx[ln x] = ?", opts:["ln x","1/x","x·ln x","e^x"], ans:1, exp:"d/dx[ln x] = 1/x. This appears constantly in FRQs involving logarithmic functions." },
   { q:"d/dx[arctan x] = ?", opts:["1/√(1−x²)","-1/(1+x²)","1/(1+x²)","arctan x"], ans:2, exp:"d/dx[arctan x] = 1/(1+x²). Memorize arcsin, arccos, and arctan derivatives." },
@@ -833,7 +833,7 @@ apGuides.apcalcab.chapters[2].sections.push(quiz([
   { q:"d/dx[e^(3x²)] = ?", opts:["e^(3x²)","3x·e^(3x²)","6x·e^(3x²)","6·e^(3x²)"], ans:2, exp:"Chain rule: derivative of e^u is e^u · u'. Here u = 3x², u' = 6x. Result: 6x·e^(3x²)." }
 ]));
 
-apGuides.apcalcab.chapters[3].sections.push(quiz([
+apGuides.apcalcbc.chapters[3].sections.push(quiz([
   { q:"In a related rates problem, you differentiate the geometric equation with respect to:", opts:["x","y","t (time)","the unknown variable"], ans:2, exp:"Related rates always differentiate with respect to time t, since all quantities are changing over time." },
   { q:"L'Hôpital's Rule can only be applied when the limit gives:", opts:["Any real number","0/0 or ∞/∞","0·∞ directly","A finite answer"], ans:1, exp:"Always verify the form is 0/0 or ∞/∞ before applying L'Hôpital's. Other indeterminate forms need rewriting first." },
   { q:"Linear approximation of f(x) near x = a is:", opts:["f(x) ≈ f'(a)","f(x) ≈ f(a) + f'(a)(x−a)","f(x) ≈ f(a)·f'(x)","f(x) ≈ f''(a)(x−a)²"], ans:1, exp:"The tangent line at x=a is the best linear approximation: L(x) = f(a) + f'(a)(x−a)." },
@@ -846,7 +846,7 @@ apGuides.apcalcab.chapters[3].sections.push(quiz([
   { q:"Which of these is NOT an indeterminate form that L'Hôpital's applies to directly?", opts:["0/0","∞/∞","1/0","Both A and B"], ans:2, exp:"1/0 is not indeterminate — it equals ±∞. L'Hôpital's only applies to 0/0 or ∞/∞." }
 ]));
 
-apGuides.apcalcab.chapters[4].sections.push(quiz([
+apGuides.apcalcbc.chapters[4].sections.push(quiz([
   { q:"The Mean Value Theorem guarantees a point c where f'(c) equals:", opts:["0","f(a) − f(b)","[f(b)−f(a)]/(b−a)","f''(c)"], ans:2, exp:"MVT: there exists c where the instantaneous rate (f'(c)) equals the average rate ([f(b)−f(a)]/(b−a))." },
   { q:"If f'(x) > 0 on an interval, then f is:", opts:["Concave up","Decreasing","Increasing","At a maximum"], ans:2, exp:"Positive derivative means the function is increasing on that interval." },
   { q:"At a critical point where f' changes from positive to negative, there is a:", opts:["Local minimum","Inflection point","Local maximum","Vertical asymptote"], ans:2, exp:"First derivative test: f' changes + to − → local maximum. f' changes − to + → local minimum." },
@@ -859,7 +859,7 @@ apGuides.apcalcab.chapters[4].sections.push(quiz([
   { q:"In optimization, after finding critical points on a closed interval, the next step is:", opts:["Check the sign of f''","Evaluate f at all critical points and endpoints","Set f'' = 0","Integrate f"], ans:1, exp:"To find absolute extrema, compute f at every critical point and at both endpoints, then compare." }
 ]));
 
-apGuides.apcalcab.chapters[5].sections.push(quiz([
+apGuides.apcalcbc.chapters[5].sections.push(quiz([
   { q:"A left Riemann sum with rectangles that are above the curve means f is:", opts:["Concave up","Decreasing","Increasing","Concave down"], ans:2, exp:"For an increasing function, the left endpoint is lower than the right, so LRAM underestimates. Wait — if f is increasing, LRAM underestimates. Left endpoints below curve → underestimate." },
   { q:"FTC Part 1: if F(x) = ∫[a to x] f(t)dt, then F'(x) = ?", opts:["f(a)","∫f(t)dt","f(x)","F(a)"], ans:2, exp:"FTC Part 1: derivative of an integral with a variable upper limit equals the integrand at the upper limit." },
   { q:"FTC Part 2: ∫[a to b] f(x)dx = ?", opts:["f(b) − f(a)","F'(b) − F'(a)","F(b) − F(a)","f(b) + f(a)"], ans:2, exp:"FTC Part 2: compute using any antiderivative F: the value is F(b) − F(a)." },
@@ -872,7 +872,7 @@ apGuides.apcalcab.chapters[5].sections.push(quiz([
   { q:"∫cos(x) dx = ?", opts:["sin(x) + C","-sin(x) + C","cos(x) + C","-cos(x) + C"], ans:0, exp:"∫cos x dx = sin x + C. And ∫sin x dx = −cos x + C. Know all basic trig antiderivatives." }
 ]));
 
-apGuides.apcalcab.chapters[6].sections.push(quiz([
+apGuides.apcalcbc.chapters[6].sections.push(quiz([
   { q:"To solve dy/dx = xy by separation of variables, you first:", opts:["Integrate both sides with respect to x","Move all y terms to one side and all x terms to the other","Set y = Ce^x","Differentiate both sides"], ans:1, exp:"Separation: rearrange to (1/y)dy = x dx, then integrate both sides separately." },
   { q:"A slope field has horizontal segments where:", opts:["dy/dx is undefined","dy/dx = 0","y = 0","x = 0"], ans:1, exp:"Horizontal line segments in a slope field occur where the slope dy/dx = 0." },
   { q:"The general solution to dy/dt = ky is:", opts:["y = kt + C","y = Ce^(kt)","y = k·ln(t) + C","y = C·t^k"], ans:1, exp:"Exponential growth/decay: the solution to dy/dt = ky is always y = Ce^(kt). Memorize this form." },
@@ -885,7 +885,7 @@ apGuides.apcalcab.chapters[6].sections.push(quiz([
   { q:"In a slope field, a segment at point (x,y) has slope equal to:", opts:["x + y","The value of dy/dx evaluated at that (x,y)","The y-intercept","f''(x)"], ans:1, exp:"Each slope field segment shows the slope dy/dx at that specific (x,y) coordinate — plug the point into the differential equation." }
 ]));
 
-apGuides.apcalcab.chapters[7].sections.push(quiz([
+apGuides.apcalcbc.chapters[7].sections.push(quiz([
   { q:"The area between f(x) and g(x) on [a,b] where f ≥ g is:", opts:["∫[a to b] f(x)dx","∫[a to b] g(x)dx","∫[a to b][f(x)−g(x)]dx","∫[a to b][f(x)+g(x)]dx"], ans:2, exp:"Area between curves: always (top function − bottom function) integrated over [a,b]. Find intersections first." },
   { q:"The Disk Method for volume rotating around the x-axis is:", opts:["2π∫x·f(x)dx","π∫[f(x)]²dx","π∫[R²−r²]dx","∫[f(x)]²dx"], ans:1, exp:"Disk method: V = π∫[f(x)]²dx. Each cross-section is a disk with radius f(x)." },
   { q:"The Washer Method is used when:", opts:["There is only one curve","The solid has a hole (rotating region between two curves)","Rotating around the y-axis","f(x) < 0"], ans:1, exp:"Washer method: when there's a hole, V = π∫[R(x)² − r(x)²]dx where R is outer radius and r is inner." },
@@ -1945,6 +1945,143 @@ apGuides.apcsa = {
     ]),
   ]
 };
+
+apGuides.aphug = {
+  title: 'AP Human Geography',
+  exam: 'May 2027 · 2 hrs 15 min · 60 MCQ + 3 FRQ',
+  passRate: '59.0%',
+  chapters: [
+    makeChapter(1,'Thinking Geographically',[
+      concepts([
+        { term:'Maps & Scale', body:'Reference maps show locations; thematic maps show patterns. Large-scale = small area, high detail. Small-scale = large area, less detail.' },
+        { term:'Site vs Situation', body:'Site = physical characteristics of a place (terrain, water, climate). Situation = location relative to other places. Both affect why cities develop where they do.' },
+        { term:'Geographic Data', body:'GIS layers spatial datasets. Remote sensing = satellite data. GPS = absolute location. Quantitative data: census, statistics. Qualitative: interviews, observation.' },
+        { term:'Distance Decay', body:'Interaction between places decreases as distance increases. Space-time compression: technology reduces perceived distance.' },
+      ]),
+      vocab([
+        { term:'Toponym', def:'A place name — reflects culture, history, or physical features.' },
+        { term:'Site', def:'Physical characteristics of a location (terrain, climate, water supply).' },
+        { term:'Situation', def:'Location of a place relative to surrounding places.' },
+        { term:'Distance decay', def:'The further apart two places are, the less they interact.' },
+        { term:'GIS', def:'Geographic Information System — software that layers and analyzes spatial data.' },
+      ]),
+      tips(['Absolute location = GPS coordinates. Relative location = near the river, south of the city.','Map projections always distort something — Mercator preserves shape, equal-area projections preserve size, no projection preserves both.','']),
+      frq(['FRQ: Explain how GIS can be used to study urban heat islands — describe the specific data layers (land cover, temperature, population) and what their overlay reveals.']),
+    ]),
+    makeChapter(2,'Population & Migration',[
+      concepts([
+        { term:'Population Density Types', body:'Arithmetic density = total pop / total land. Physiological density = total pop / arable land (best overpopulation indicator). Agricultural density = farmers / arable land. Ecumene = permanently inhabited land.' },
+        { term:'Demographic Transition Model', body:'Stage 1: high birth + death rates, no growth. Stage 2: death rate drops (medicine), birth rate stays high — rapid growth. Stage 3: birth rate falls (urbanization, education). Stage 4: low birth + death — stable. Stage 5: death > birth — decline. Most developed countries = Stage 4-5.' },
+        { term:'Population Pyramids', body:'Wide base = high birth rate, developing (Stage 2). Narrow base = low birth rate, aging population (Stage 4-5). Bulge = large cohort (baby boomers). Stationary pyramid = Stage 4.' },
+        { term:'Migration Push & Pull', body:'Push factors: war, poverty, famine, persecution, disaster. Pull factors: jobs, safety, family, education, political freedom. Intervening obstacles: cost, language barriers, legal restrictions.' },
+        { term:"Ravenstein's Laws", body:'1. Most migrants move short distances. 2. Migration steps toward cities. 3. Long-distance migrants head to urban centers. 4. Every stream creates a counter-stream. 5. Rural residents migrate more than urban.' },
+      ]),
+      vocab([
+        { term:'Physiological density', def:'Population divided by arable land — best measure of population pressure on food resources.' },
+        { term:'NIR (Natural Increase Rate)', def:'Birth rate minus death rate, as a percentage.' },
+        { term:'TFR (Total Fertility Rate)', def:'Average children per woman over her lifetime. Replacement level = 2.1.' },
+        { term:'Refugee', def:'Person who fled their country due to persecution; protected by UNHCR.' },
+        { term:'IDP', def:'Internally Displaced Person — forced from home but remains in their country.' },
+        { term:'Chain migration', def:'Migrants follow earlier migrants from the same origin community.' },
+        { term:'Transhumance', def:'Seasonal movement of livestock between mountain and valley pastures.' },
+      ]),
+      tips(['DTM is tested on nearly every AP HUG exam. Know all 5 stages and example countries for each.','Physiological density matters most in densely farmed regions — Egypt along the Nile has very high physiological density despite low arithmetic density.','Guest worker programs (German Gastarbeiter, US H-2A) are strong FRQ examples of voluntary economic migration.']),
+      frq(['FRQ: Using the DTM, explain why Stage 2 countries experience rapid population growth — death rates fall first due to medicine and clean water while birth rates remain high due to cultural norms, creating a gap that drives growth.','FRQ: Identify one push factor and one pull factor explaining rural-to-urban migration in a named developing country.']),
+    ]),
+    makeChapter(3,'Cultural Patterns & Processes',[
+      concepts([
+        { term:'Types of Diffusion', body:'Relocation: culture moves with migrants. Expansion diffusion: stays at origin while spreading — contagious (person-to-person, like disease), hierarchical (city to city, then to rural areas), stimulus (idea spreads but local form adapts — McDonalds adapting menus).' },
+        { term:'Language', body:'Language families: Indo-European (largest), Sino-Tibetan, Afro-Asiatic. Lingua franca: common language for trade (English, Swahili). Dialect = regional variety. Pidgin = simplified contact language. Creole = pidgin that becomes a native language.' },
+        { term:'Religion', body:'Universalizing: actively seek converts — Christianity (2.4B), Islam (1.9B, fastest growing), Buddhism. Ethnic: tied to specific group — Hinduism, Judaism, Shinto. Sacred spaces mark religious cultural landscapes (Mecca, Jerusalem, Varanasi).' },
+        { term:'Cultural Identity', body:'Ethnocentrism: judging other cultures by your own standards. Cultural relativism: evaluating on own terms. Syncretism: blending elements of different cultures. Acculturation: adopting another culture\'s traits. Assimilation: losing original culture.' },
+      ]),
+      vocab([
+        { term:'Hearth', def:'Point of origin of a cultural practice, religion, or innovation.' },
+        { term:'Folk culture', def:'Traditional practices of small homogeneous groups; spreads by relocation diffusion.' },
+        { term:'Popular culture', def:'Widely shared practices spread by mass media; hierarchical and contagious diffusion.' },
+        { term:'Lingua franca', def:'A common language used among people with different native languages.' },
+        { term:'Syncretism', def:'The blending of elements from different cultures or religions.' },
+        { term:'Cultural landscape', def:'The visible human imprint on the physical environment.' },
+      ]),
+      tips(['Know all 4 diffusion types with examples. Contagious = disease, social media. Hierarchical = fashion trends NYC > small town. Relocation = immigrant communities. Stimulus = fast food adapted locally.','Universalizing religions actively recruit converts and spread geographically. Ethnic religions (Hinduism, Judaism) do not typically seek converts.']),
+      frq(['FRQ: Explain how hierarchical diffusion contributed to the global spread of popular culture — trends originate in global cities (NYC, London, LA), spread via media corporations to regional cities, then rural areas.']),
+    ]),
+    makeChapter(4,'Political Patterns & Processes',[
+      concepts([
+        { term:'State vs Nation vs Nation-State', body:'State: sovereign political territory. Nation: cultural group. Nation-state: when they align (Iceland, Japan). Stateless nation: cultural group with no state (Kurds, Palestinians). Multistate nation: one nation in multiple states (ethnic Koreans).' },
+        { term:'Boundary Types', body:'Antecedent: drawn before settlement. Subsequent: drawn after settlement, follows cultural lines. Superimposed: drawn by outside powers ignoring culture (Berlin Conference 1884-85, Africa). Relic: no longer political but leaves cultural trace. Geometric: straight line (US-Canada 49th parallel).' },
+        { term:'State Shapes', body:'Compact: efficient (Poland, Zimbabwe). Prorupted: access arm (Thailand, Namibia). Elongated: narrow, hard to govern (Chile, Vietnam). Fragmented: separated pieces (Philippines, Indonesia). Perforated: another state is inside it (South Africa perforating Lesotho).' },
+        { term:'Centripetal & Centrifugal Forces', body:'Centripetal (unite): shared language, religion, national identity, strong economy. Centrifugal (divide): ethnic conflict, regionalism, economic inequality, separatism. Devolution = transfer of power from central to regional governments.' },
+        { term:'Supranationalism', body:'States cede sovereignty to a higher body. EU = economic/political. NATO = military. UN = diplomatic. WTO = trade. Benefits: trade efficiency, collective security. Costs: loss of national sovereignty.' },
+      ]),
+      vocab([
+        { term:'Sovereignty', def:'A state\'s authority to govern itself without outside interference.' },
+        { term:'Devolution', def:'Transfer of political power from central to regional governments (Scotland, Catalonia).' },
+        { term:'Balkanization', def:'The fragmentation of a state into smaller, often hostile units.' },
+        { term:'Gerrymandering', def:'Drawing electoral district boundaries to favor a particular political party or group.' },
+        { term:'Irredentism', def:'Movement to incorporate territory with a shared ethnic population from a neighboring state.' },
+        { term:'Shatter belt', def:'Region of persistent political instability between competing major powers.' },
+      ]),
+      tips(['Superimposed boundaries = most tested type. FRQ classic: Berlin Conference split ethnic groups across colonial boundaries in Africa, causing post-independence conflict (Rwanda, Nigeria).','Devolution: always name the centrifugal force and give a real example — Scotland (Scottish national identity), Catalonia (economic resentment + Catalan language), Quebec (French language).']),
+      frq(['FRQ: Explain how a superimposed boundary caused political instability using an African example — Berlin Conference ignored ethnic boundaries; post-independence states inherited artificial borders causing ethnic conflict.','FRQ: Identify one centripetal and one centrifugal force in a country and explain their effect on state cohesion.']),
+    ]),
+    makeChapter(5,'Agriculture & Rural Land Use',[
+      concepts([
+        { term:'Agricultural Revolutions', body:'First (Neolithic, ~10,000 BCE): plant/animal domestication, permanent settlement. Second (18th-19th c.): crop rotation, selective breeding, enclosure movement. Green Revolution (1960s-70s): high-yield varieties, synthetic fertilizers, pesticides, irrigation — raised output but increased inequality.' },
+        { term:'Von Thünen Model', body:'Concentric rings around one central market on a flat plain. Ring 1: dairy and market gardening (perishable). Ring 2: timber (bulky). Ring 3: intensive grain farming. Ring 4: extensive ranching. Transportation cost and perishability determine ring order.' },
+        { term:'Agricultural Systems', body:'Subsistence: shifting cultivation (slash-and-burn, tropics), pastoral nomadism, intensive subsistence (paddy rice). Commercial: grain farming, mixed crop-livestock, plantation (monoculture export), Mediterranean (vineyards, olives, citrus).' },
+        { term:'Rural Settlement Patterns', body:'Clustered/nucleated: homes grouped for defense or water access. Dispersed: isolated farmsteads (US Midwest). Linear: along road, river, or coast. Long-lot: narrow strips from river (French Canada, Louisiana). Township & range: US grid (Land Ordinance 1785).' },
+      ]),
+      vocab([
+        { term:'Shifting cultivation', def:'Slash-and-burn farming in tropical forests; plots used briefly then left to regenerate.' },
+        { term:'Plantation agriculture', def:'Large commercial monoculture farms producing a cash crop for export.' },
+        { term:'Green Revolution', def:'1960s-70s introduction of high-yield seeds, fertilizers, and irrigation to developing countries.' },
+        { term:'Long-lot survey', def:'Narrow parcels perpendicular to a river; French colonial land system (Louisiana, Quebec).' },
+        { term:'Township and range', def:'US government grid survey system used west of the Ohio River after 1785.' },
+      ]),
+      tips(['Von Thünen is the most frequently tested model in Unit 5. Know ring order AND the reasoning: perishable goods close, bulky goods close due to transport cost, grazing far because it needs space.','Green Revolution FRQ: positive = increased food production. Negative = environmental degradation, farmer debt, inequality (large farms benefited more than small subsistence farmers).','Long-lot = French colonial (Louisiana, Quebec). Township & range = American grid (West). Metes & bounds = irregular (colonial East).']),
+      frq(['FRQ: Using Von Thünen, explain why dairy farming locates nearest the city — dairy is perishable, requires refrigeration and fast transport, so proximity to market outweighs high land costs.','FRQ: Describe one positive and one negative effect of the Green Revolution on food security in a developing country.']),
+    ]),
+    makeChapter(6,'Cities & Urban Land Use',[
+      concepts([
+        { term:'Urban Models', body:'Concentric Zone (Burgess, 1925): CBD → transition zone → working class → middle class → commuter zone. Sector Model (Hoyt): wedge-shaped sectors along transit lines. Multiple Nuclei (Harris & Ullman): several activity nodes. Latin American: spine of commercial development + elite residential sector + disamenity zones. Peripheral Model: US post-WWII suburbs + beltway edge cities.' },
+        { term:'Urban Processes', body:'Gentrification: middle/upper class investment in low-income urban areas — raises property values, displaces original residents. Urban renewal: government-led redevelopment. White flight: post-WWII suburbanization driven by racial fears. Blockbusting: real estate exploitation of white flight. Filtering: housing passes from wealthy to lower-income residents as it ages.' },
+        { term:'Urban Hierarchy', body:'Rank-size rule: nth-largest city = (1/n) × largest city. Primate city: 2× or more the next-largest city (Bangkok, Paris, Mexico City). Global/world city: command-and-control nodes of global economy (NYC, London, Tokyo). Central place theory (Christaller): explains city spacing via hexagonal market areas.' },
+        { term:'Urbanization Challenges', body:'Megacities (10M+): mostly in Asia, Africa, Latin America. Overurbanization: cities grow faster than jobs/services. Squatter settlements (favelas, barrios, shanty towns): informal housing on illegally occupied land. Suburbanization + sprawl: low-density auto-dependent development consuming land.' },
+      ]),
+      vocab([
+        { term:'CBD', def:'Central Business District — highest land values, financial and commercial core.' },
+        { term:'Gentrification', def:'Reinvestment in declining urban neighborhoods raising property values and displacing low-income residents.' },
+        { term:'Edge city', def:'A large node of office and retail development in the suburbs.' },
+        { term:'Primate city', def:'A city disproportionately larger than all others in a country.' },
+        { term:'Squatter settlement', def:'Informal housing built without legal land ownership; common in rapidly urbanizing Global South.' },
+        { term:'Rank-size rule', def:'Second-largest city = ½ the largest; third = ⅓; and so on.' },
+      ]),
+      tips(['Know all 5 urban models and when each applies. Burgess = American industrial city. Hoyt = transportation corridors. Multiple Nuclei = suburban America. Latin American = spine model. Peripheral = post-WWII US suburbs.','Primate city vs. rank-size: if a country has a primate city it violates the rank-size rule. US follows rank-size rule; France (Paris), Thailand (Bangkok) do not.']),
+      frq(['FRQ: Explain how gentrification changes the character of an urban neighborhood — rising rents, new businesses targeting higher-income residents, demographic shift, cultural and community displacement.','FRQ: Why do squatter settlements typically form on the periphery of rapidly growing cities in the Global South — rural-to-urban migration outpaces formal housing supply; peripheral land is cheapest and least regulated.']),
+    ]),
+    makeChapter(7,'Industrial & Economic Development',[
+      concepts([
+        { term:"Weber's Least Cost Theory", body:"Industries minimize three costs: transportation (usually dominant), labor, and agglomeration. Agglomeration = clustering of related industries. Deglomeration = dispersal when congestion and costs rise. Break-of-bulk point = where cargo transfers between transport modes." },
+        { term:'Development Models', body:"Rostow's Stages: Traditional → Pre-takeoff → Takeoff → Maturity → Mass Consumption. Criticized as ethnocentric. Wallerstein's World Systems Theory: core (wealthy) exploits periphery (poor) through commodity chains. Semi-periphery: transitioning countries (Mexico, Brazil, India)." },
+        { term:'Development Indicators', body:'GDP per capita: income divided by population — misses inequality. HDI: income + education + life expectancy composite. GDI: HDI by gender. GII: gender inequality. GINI coefficient: 0 = perfect equality, 1 = maximum inequality.' },
+        { term:'Globalization', body:'Export Processing Zones/Free Trade Zones: low-wage assembly for export. Maquiladoras: Mexican border factories. Commodity chain: raw material → manufacturing → distribution → retail. Outsourcing/offshoring: moving operations to cheaper regions.' },
+        { term:'Economic Sectors', body:'Primary: agriculture, mining, fishing. Secondary: manufacturing. Tertiary: services. Quaternary: information, finance. Quinary: top decision-making. Deindustrialization: developed economies shift away from manufacturing.' },
+      ]),
+      vocab([
+        { term:'Commodity chain', def:'The full sequence from raw material extraction to consumer purchase.' },
+        { term:'Core-periphery', def:'Wealthy core exploits poorer periphery through unequal trade and investment relationships.' },
+        { term:'Maquiladora', def:'Factory in Mexico near US border importing materials duty-free and exporting finished goods.' },
+        { term:'HDI', def:'Human Development Index — UNDP composite of health, education, and income.' },
+        { term:'Break-of-bulk point', def:'Location where cargo transfers between transportation modes (port, rail terminal).' },
+        { term:'Deindustrialization', def:'Decline of manufacturing employment in a developed economy as industry relocates.' },
+      ]),
+      tips(["Weber: transportation cost is almost always the dominant factor — know when labor cost or agglomeration would override it.",'Maquiladoras are a perennial FRQ topic: explain NAFTA/USMCA, cheap Mexican labor, proximity to US market, export processing zone.',"HDI vs GDP: GDP misses inequality and quality of life. HDI adds education and health — a much fuller picture of development."]),
+      frq(["FRQ: Using Wallerstein's world systems theory, explain the relationship between a core and periphery country — core exports manufactured goods, imports cheap raw materials; periphery kept poor by unfavorable terms of trade.","FRQ: Explain how the HDI provides a more complete picture of development than GDP per capita — it adds life expectancy (health) and years of schooling (education), capturing dimensions GDP ignores."]),
+    ]),
+  ]
+};
+
 
 // =========================================================
 // QUIZ UI RENDERER

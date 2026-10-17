@@ -1106,6 +1106,15 @@
   </style>
   </style>
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6JC6N3JF1J"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6JC6N3JF1J');
+</script>
 <body>
 
 <!-- ===================== TOP NAV ===================== -->
@@ -1252,35 +1261,23 @@
 
       <!-- GPA What-If -->
       <div class="dash-card">
-        <div class="dash-card-title">What-If GPA Calculator</div>
-        <p style="font-size:.8rem;color:var(--muted);">What grade do you need to hit your target GPA?</p>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div class="whatif-row">
-            <label for="wiCurrentGPA">Current GPA</label>
-            <input type="number" id="wiCurrentGPA" placeholder="3.40" step="0.01" min="0" max="5" oninput="calcWhatIf()" />
-          </div>
-          <div class="whatif-row">
-            <label for="wiCredits">Credits so far</label>
-            <input type="number" id="wiCredits" placeholder="12" min="1" oninput="calcWhatIf()" />
-          </div>
-          <div class="whatif-row">
-            <label for="wiNewCredits">New course credits</label>
-            <input type="number" id="wiNewCredits" placeholder="4" min="0.5" step="0.5" oninput="calcWhatIf()" />
-          </div>
-          <div class="whatif-row">
-            <label for="wiTarget">Target GPA</label>
-            <input type="number" id="wiTarget" placeholder="3.70" step="0.01" min="0" max="5" oninput="calcWhatIf()" />
-          </div>
+        <div class="dash-card-title">GPA Calculator</div>
+        <div class="gpa-result" style="padding:8px 0 2px;">
+          <div class="gpa-val" id="dashGpaVal" style="font-size:2.2rem;">—</div>
+          <div class="gpa-label">GPA (4.0 scale)</div>
         </div>
-        <div class="whatif-result" id="whatifResult">
-          <div class="big">—</div>
-          <div class="sub">Fill in the fields above</div>
+        <div class="gpa-header" style="margin-top:6px;">
+          <span>Course</span><span>Grade</span><span>Credits</span><span></span>
+        </div>
+        <div class="gpa-rows" id="dashGpaRows"></div>
+        <div class="btn-row" style="margin-top:6px;">
+          <button class="btn btn-primary btn-sm" onclick="dashGpaAddRow()">+ Add</button>
+          <button class="btn btn-ghost btn-sm" onclick="dashGpaClear()">Clear</button>
+          <button class="btn btn-ghost btn-sm" onclick="showPanel('gpa')">Full →</button>
         </div>
       </div>
-
     </div>
-
-    <!-- Tools strip -->
+        <!-- Tools strip -->
     <div class="dash-tools-strip">
       <button class="quick-tool-btn" onclick="showPanel('timer')">
         <span class="quick-tool-icon">⏱</span><div class="quick-tool-label">Timer</div>
@@ -3025,32 +3022,40 @@ function initDashboard() {
 }
 
 // =========================================================
-// WHAT-IF GPA
+// DASHBOARD GPA CALCULATOR
 // =========================================================
-function calcWhatIf() {
-  const cur  = parseFloat(document.getElementById('wiCurrentGPA').value);
-  const cred = parseFloat(document.getElementById('wiCredits').value);
-  const newC = parseFloat(document.getElementById('wiNewCredits').value);
-  const tgt  = parseFloat(document.getElementById('wiTarget').value);
-  const el   = document.getElementById('whatifResult');
-  if (isNaN(cur)||isNaN(cred)||isNaN(newC)||isNaN(tgt)) {
-    el.innerHTML = '<div class="big">—</div><div class="sub">Fill in all fields</div>'; return;
-  }
-  // needed = (target*(cred+newC) - cur*cred) / newC
-  const needed = (tgt*(cred+newC) - cur*cred) / newC;
-  if (needed > 5.0) {
-    el.innerHTML = '<div class="big" style="color:var(--red);">Not possible</div><div class="sub">Even a 5.0 won\'t reach that target with these credits</div>';
-  } else if (needed < 0) {
-    el.innerHTML = '<div class="big" style="color:var(--green);">Already there</div><div class="sub">You\'ll hit your target even with an F</div>';
-  } else {
-    const letter = needed>=3.7?'A-/A':needed>=3.3?'B+':needed>=3.0?'B':needed>=2.7?'B-':needed>=2.3?'C+':needed>=2.0?'C':'D or lower';
-    const color  = needed>=3.3?'var(--green)':needed>=2.7?'var(--orange)':'var(--red)';
-    el.innerHTML = `<div class="big" style="color:${color};">${needed.toFixed(2)}</div>
-      <div class="sub">GPA points needed in the new course (~${letter})</div>`;
-  }
+function dashGpaAddRow() {
+  const row = document.createElement('div');
+  row.className = 'gpa-row';
+  const sel = '<select>' + grades.map(g => '<option>' + g + '</option>').join('') + '</select>';
+  row.innerHTML =
+    '<input type="text" placeholder="Course (optional)" />' +
+    sel +
+    '<input type="number" value="3" min="0.5" max="12" step="0.5" />' +
+    '<button onclick="this.closest(\&#39;.gpa-row\&#39;).remove();dashGpaCalc();" aria-label="Remove">✕</button>';
+  document.getElementById('dashGpaRows').appendChild(row);
+  row.querySelectorAll('select, input').forEach(el => el.addEventListener('input', dashGpaCalc));
+  dashGpaCalc();
 }
-
-// =========================================================
+function dashGpaCalc() {
+  let total = 0, credits = 0;
+  document.querySelectorAll('#dashGpaRows .gpa-row').forEach(r => {
+    const grade = r.querySelector('select').value;
+    const inputs = r.querySelectorAll('input');
+    const cred  = parseFloat(inputs[1] && inputs[1].value) || 3;
+    if (gradeMap[grade] === undefined) return;
+    total   += gradeMap[grade] * cred;
+    credits += cred;
+  });
+  document.getElementById('dashGpaVal').textContent = credits > 0 ? (total / credits).toFixed(2) : '—';
+}
+function dashGpaClear() {
+  document.getElementById('dashGpaRows').innerHTML = '';
+  document.getElementById('dashGpaVal').textContent = '—';
+  dashGpaAddRow(); dashGpaAddRow(); dashGpaAddRow();
+}
+// Seed dashboard GPA rows
+dashGpaAddRow(); dashGpaAddRow(); dashGpaAddRow();
 // AP STUDY GUIDES DATA + RENDERER
 // =========================================================
 function makeChapter(num, title, sections) {

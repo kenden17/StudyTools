@@ -1103,6 +1103,58 @@
       .dash-grid { max-width: 1200px; margin-left: auto; margin-right: auto; }
     }
 
+
+    /* =========================================================
+       PRINTABLES PANEL
+    ========================================================= */
+    .print-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .print-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .print-card-subject {
+      font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .09em; color: var(--muted);
+    }
+    .print-card-title {
+      font-size: 1rem; font-weight: 800; line-height: 1.25; color: var(--text);
+    }
+    .print-card-meta {
+      font-size: .75rem; color: var(--muted); line-height: 1.5;
+    }
+    .print-card-actions {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;
+    }
+    .print-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: none; border-radius: var(--radius-sm);
+      padding: 10px 14px; font-size: .82rem; font-weight: 600;
+      min-height: 40px; cursor: pointer; touch-action: manipulation;
+      transition: opacity var(--transition);
+      text-decoration: none;
+    }
+    .print-btn:hover { opacity: .85; }
+    .print-btn-primary { background: var(--accent); color: #fff; }
+    .print-btn-outline {
+      background: var(--surface2); color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+
+    /* ── Print stylesheet ── */
+    @media print {
+      body > *:not(#printFrame) { display: none !important; }
+      #printFrame { display: block !important; }
+      .print-page { padding: 0; margin: 0; }
+    }
+
   </style>
   </style>
 </head>
@@ -1130,6 +1182,7 @@
     <button class="nav-link" data-panel="todo">To-Do</button>
     <button class="nav-link" data-panel="notes">Notes</button>
     <button class="nav-link" data-panel="countdown">Countdowns</button>
+    <button class="nav-link" data-panel="printables">Printables</button>
   </div>
   <div class="nav-right">
     <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
@@ -1198,6 +1251,9 @@
       </button>
       <button class="more-sheet-btn" data-panel="countdown">
         <span class="more-sheet-icon">⏳</span> Countdowns
+      </button>
+      <button class="more-sheet-btn" data-panel="printables">
+        <span class="more-sheet-icon">🖨️</span> Printables
       </button>
     </div>
   </div>
@@ -1748,6 +1804,33 @@
 
   </div>
 </div>
+
+
+<!-- PRINTABLES -->
+<div class="page-panel" id="panel-printables">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">🖨️ <span>Printables</span></div>
+      <div class="panel-hero-sub">Semester study guides &amp; official College Board FRQ PDFs for every CHS AP course</div>
+    </div>
+  </div>
+  <div class="panel-inner wide">
+
+    <div class="print-instructions card">
+      <div class="card-title">How to use</div>
+      <div style="font-size:.85rem;color:var(--muted);line-height:1.65;">
+        <strong style="color:var(--text);">Study Guide PDF</strong> — click "Print / Save PDF" on any course card. Your browser's print dialog opens; choose "Save as PDF" to keep a copy or send it to a printer.<br><br>
+        <strong style="color:var(--text);">Official FRQs</strong> — each card links directly to College Board's past free-response question page for that course. Real exam questions, scoring guidelines, and sample student responses.
+      </div>
+    </div>
+
+    <div id="printCardsGrid" class="print-cards-grid"></div>
+
+  </div>
+</div>
+
+<!-- PRINT STUDY GUIDE (hidden, rendered on demand) -->
+<div id="printFrame" style="display:none;" aria-hidden="true"></div>
 
 <footer>
   CHS Study Tools · Cedarburg Bulldogs 🐾 · Free &amp; private · No account needed ·
@@ -3549,6 +3632,333 @@ setTimeout(function() { loadGuides(); }, 1500);
     origShowPanel(id);
     if (id === 'countdown') { renderAP(); renderSchool(); }
   };
+
+})();
+
+
+// =========================================================
+// PRINTABLES
+// =========================================================
+(function initPrintables() {
+
+  // Course data: key, title, subject, exam info, CB FRQ URL slug, and topic outline
+  const printCourses = [
+    {
+      key: 'apcalcab', title: 'AP Calculus AB', subject: 'Math',
+      exam: 'May 2027 · 3 hrs 15 min · 45 MCQ + 6 FRQ',
+      cbSlug: 'ap-calculus-ab',
+      units: [
+        { name: 'Unit 1: Limits & Continuity', topics: ['Definition of a limit', 'One-sided limits', 'Continuity & discontinuity types', 'Squeeze Theorem', 'Limits at infinity & asymptotes', 'IVT'] },
+        { name: 'Unit 2: Differentiation — Definition', topics: ['Limit definition of derivative', 'Power / Product / Quotient rules', 'Chain rule', 'Trig derivatives', 'Differentiability vs continuity'] },
+        { name: 'Unit 3: Differentiation — Composite & Implicit', topics: ['Implicit differentiation', 'Inverse function derivatives', 'd/dx[ln x], d/dx[eˣ], inverse trig', 'Logarithmic differentiation'] },
+        { name: 'Unit 4: Contextual Applications', topics: ['Related rates', "L'Hôpital's Rule", 'Linear approximation', 'Motion along a line'] },
+        { name: 'Unit 5: Analytical Applications', topics: ['MVT & EVT', 'Increasing/decreasing intervals', 'First & second derivative tests', 'Concavity & inflection points', 'Optimization'] },
+        { name: 'Unit 6: Integration & Accumulation', topics: ['Riemann sums (LRAM/RRAM/MRAM)', 'FTC Part 1 & 2', 'Basic antiderivatives', 'u-substitution', 'Average value'] },
+        { name: 'Unit 7: Differential Equations', topics: ['Separable DEs', 'Slope fields', 'Exponential growth & decay'] },
+        { name: 'Unit 8: Applications of Integration', topics: ['Area between curves', 'Disk & washer method', 'Accumulation problems', 'Particle motion'] },
+      ],
+      frqTypes: ['FRQ 1–2: Calculator allowed (rates, accumulation)', 'FRQ 3–6: No calculator (analytical, DE, area/volume)', 'Common: related rates, FTC, DE with slope field, area between curves'],
+    },
+    {
+      key: 'apush', title: 'AP U.S. History', subject: 'History',
+      exam: 'May 2027 · 3 hrs 15 min · 55 MCQ + SAQ + DBQ + LEQ',
+      cbSlug: 'ap-united-states-history',
+      units: [
+        { name: 'Period 1: 1491–1607', topics: ['Native American societies', 'European exploration motives', 'Columbian Exchange', 'Spanish colonization & encomienda'] },
+        { name: 'Period 2: 1607–1754', topics: ['British colonial regions', 'Salutary neglect', 'African slavery & Bacon\'s Rebellion', 'Great Awakening'] },
+        { name: 'Period 3: 1754–1800', topics: ['French & Indian War', 'Road to Revolution', 'Articles of Confederation', 'Constitutional Convention & ratification', 'Federalist era'] },
+        { name: 'Period 4: 1800–1848', topics: ['Market Revolution', 'Jacksonian democracy', 'Indian Removal Act & Trail of Tears', 'Reform movements (abolition, women\'s rights)'] },
+        { name: 'Period 5: 1844–1877', topics: ['Manifest Destiny', 'Causes of the Civil War', 'Emancipation Proclamation', 'Reconstruction amendments & policies'] },
+        { name: 'Period 6: 1865–1898', topics: ['Industrialization & Gilded Age', 'Immigration & urbanization', 'Populism', 'New South & Jim Crow'] },
+        { name: 'Period 7: 1890–1945', topics: ['Progressivism', 'WWI & isolationism', 'Roaring Twenties & Great Depression', 'New Deal', 'WWII home front & diplomacy'] },
+        { name: 'Period 8: 1945–1980', topics: ['Cold War containment', 'Civil Rights Movement', 'Great Society', 'Vietnam War & protests', 'Nixon & détente'] },
+        { name: 'Period 9: 1980–Present', topics: ['Reagan Revolution & conservatism', 'End of Cold War', 'Post-9/11 foreign policy', 'Economic & cultural change'] },
+      ],
+      frqTypes: ['SAQ: 3 questions, 40 min — specific evidence required', 'DBQ: 7 documents, 60 min — sourcing, contextualization, corroboration', 'LEQ: argument essay, 40 min — thesis + evidence + reasoning'],
+    },
+    {
+      key: 'apbio', title: 'AP Biology', subject: 'Science',
+      exam: 'May 2027 · 3 hrs 15 min · 60 MCQ + 6 FRQ',
+      cbSlug: 'ap-biology',
+      units: [
+        { name: 'Unit 1: Chemistry of Life', topics: ['Water properties', 'Macromolecules (carbs, lipids, proteins, nucleic acids)', 'Enzymes & activation energy'] },
+        { name: 'Unit 2: Cell Structure & Function', topics: ['Prokaryote vs eukaryote', 'Organelles & functions', 'Membrane structure (fluid mosaic)', 'Transport: diffusion, osmosis, active'] },
+        { name: 'Unit 3: Cellular Energetics', topics: ['Photosynthesis (light reactions & Calvin cycle)', 'Cellular respiration (glycolysis, Krebs, ETC)', 'ATP yield', 'Fermentation'] },
+        { name: 'Unit 4: Cell Communication & Cell Cycle', topics: ['Signal transduction pathways', 'G-protein & enzyme-linked receptors', 'Mitosis & cytokinesis', 'Cancer & cell cycle checkpoints'] },
+        { name: 'Unit 5: Heredity', topics: ['Meiosis & genetic variation', 'Mendelian genetics & Punnett squares', 'Non-Mendelian inheritance', 'Sex-linked traits', 'Chromosomal abnormalities'] },
+        { name: 'Unit 6: Gene Expression & Regulation', topics: ['DNA replication', 'Transcription & translation', 'Gene regulation (lac operon, eukaryotic)', 'Mutations & biotechnology (PCR, gel electrophoresis)'] },
+        { name: 'Unit 7: Natural Selection', topics: ['Darwin\'s natural selection', 'Hardy-Weinberg equilibrium', 'Modes of selection', 'Speciation & phylogenetics'] },
+        { name: 'Unit 8: Ecology', topics: ['Population growth (logistic vs exponential)', 'Species interactions', 'Energy flow & trophic levels', 'Biogeochemical cycles', 'Ecosystem disruption'] },
+      ],
+      frqTypes: ['FRQ 1–2: Long (8–10 pts) — experimental design common', 'FRQ 3–6: Short (4 pts each)', 'Connect every answer back to evolution when possible'],
+    },
+    {
+      key: 'aplang', title: 'AP English Language & Composition', subject: 'English',
+      exam: 'May 2027 · 3 hrs 15 min · 45 MCQ + 3 FRQ essays',
+      cbSlug: 'ap-english-language-and-composition',
+      units: [
+        { name: 'Rhetorical Situation', topics: ['Exigence, audience, purpose', 'Speaker & context', 'Message & medium', 'How situation shapes choices'] },
+        { name: 'Claims & Evidence', topics: ['Defensible thesis', 'Types of evidence (fact, anecdote, analogy)', 'Evidence selection & accuracy', 'Qualifying claims'] },
+        { name: 'Reasoning & Organization', topics: ['Line of reasoning', 'Topic sentences & transitions', 'Logical vs. emotional appeals', 'Organizing for persuasion'] },
+        { name: 'Style', topics: ['Diction & syntax choices', 'Tone and register', 'Figurative language', 'Sentence variety for effect'] },
+        { name: 'Understanding Arguments', topics: ['Identifying claims & evidence in source texts', 'Evaluating credibility & bias', 'Summary vs. analysis'] },
+        { name: 'Essay Strategies', topics: ['Synthesis essay: 6 sources, cite ≥3', 'Rhetorical analysis: analyze how author builds argument', 'Argument essay: defend a position with evidence', 'Timed writing: 40 min per essay'] },
+      ],
+      frqTypes: ['FRQ 1: Synthesis — 6 sources, build argument, cite ≥3', 'FRQ 2: Rhetorical Analysis — analyze rhetoric of a passage', 'FRQ 3: Argument — take a defensible position with evidence'],
+    },
+    {
+      key: 'apgov', title: 'AP U.S. Gov & Politics', subject: 'Social Studies',
+      exam: 'May 2027 · 3 hrs · 55 MCQ + 4 FRQ',
+      cbSlug: 'ap-united-states-government-and-politics',
+      units: [
+        { name: 'Unit 1: Foundations of Democracy', topics: ['Popular sovereignty, limited government, separation of powers', 'Articles of Confederation failures', 'Constitutional Convention compromises', 'Federalist vs Anti-Federalist arguments'] },
+        { name: 'Unit 2: Interactions Among Branches', topics: ['Congressional powers & structure', 'Presidential powers (formal & informal)', 'Federal bureaucracy & agencies', 'Supreme Court & judicial review', 'Checks & balances in practice'] },
+        { name: 'Unit 3: Civil Liberties & Rights', topics: ['Bill of Rights & incorporation doctrine', '1st Amendment (speech, press, religion)', '4th, 5th, 6th, 8th Amendment cases', 'Equal protection & due process', '15th, 19th, 26th Amendments'] },
+        { name: 'Unit 4: American Political Ideologies', topics: ['Liberal vs conservative ideology', 'Political socialization', 'Public opinion polling', 'Media & political communication'] },
+        { name: 'Unit 5: Political Participation', topics: ['Voting behavior & turnout', 'Political parties & realignment', 'Interest groups & lobbying', 'PACs & campaign finance', 'Social movements'] },
+      ],
+      frqTypes: ['FRQ 1: Concept Application — scenario-based', 'FRQ 2: Quantitative Analysis — interpret a chart/graph', 'FRQ 3: SCOTUS Comparison — compare to a required case', 'FRQ 4: Argument Essay — use required foundational docs'],
+    },
+    {
+      key: 'appsych', title: 'AP Psychology', subject: 'Social Studies',
+      exam: 'May 2027 · 2 hrs · 100 MCQ + 2 FRQ',
+      cbSlug: 'ap-psychology',
+      units: [
+        { name: 'Unit 1: Scientific Foundations', topics: ['History & approaches (behaviorism, cognitive, humanistic)', 'Research methods (experiment, survey, case study)', 'Statistics (mean, standard deviation, correlation)', 'Ethics in research'] },
+        { name: 'Unit 2: Biological Bases of Behavior', topics: ['Neurons & neurotransmitters', 'Brain structures & functions', 'Nervous & endocrine systems', 'Genetics & behavior'] },
+        { name: 'Unit 3: Sensation & Perception', topics: ['Thresholds & signal detection', 'Vision & hearing', 'Perceptual organization (Gestalt)', 'Top-down vs bottom-up processing'] },
+        { name: 'Unit 4: Learning', topics: ['Classical conditioning (Pavlov)', 'Operant conditioning (Skinner)', 'Schedules of reinforcement', 'Observational learning (Bandura)'] },
+        { name: 'Unit 5: Cognitive Psychology', topics: ['Memory encoding, storage, retrieval', 'Forgetting & memory distortion', 'Thinking, problem-solving & heuristics', 'Language acquisition'] },
+        { name: 'Unit 6: Developmental Psychology', topics: ['Piaget\'s stages', 'Attachment theory (Harlow, Ainsworth)', 'Adolescent development', 'Kohlberg\'s moral reasoning'] },
+        { name: 'Unit 7: Motivation, Emotion, Personality', topics: ['Theories of motivation (Maslow, drive reduction)', 'Emotion theories (James-Lange, Cannon-Bard)', 'Trait theories & Big Five', 'Freudian & neo-Freudian personality'] },
+        { name: 'Unit 8: Clinical Psychology', topics: ['DSM-5 categories (mood, anxiety, schizophrenia, personality)', 'Treatment approaches (CBT, psychoanalysis, drug therapy)', 'Social psychology (conformity, obedience, attribution)'] },
+      ],
+      frqTypes: ['FRQ 1: Apply 7 of 9 provided concepts to a scenario', 'FRQ 2: Research design question', 'Vocabulary is everything — learn all key terms cold'],
+    },
+    {
+      key: 'apworld', title: 'AP World History: Modern', subject: 'History',
+      exam: 'May 2027 · 3 hrs 15 min · 55 MCQ + SAQ + DBQ + LEQ',
+      cbSlug: 'ap-world-history',
+      units: [
+        { name: 'Unit 1: The Global Tapestry (1200–1450)', topics: ['Dar al-Islam & trade networks', 'Song Dynasty innovations', 'Mongol Empire & Pax Mongolica', 'Mali & trans-Saharan trade'] },
+        { name: 'Unit 2: Networks of Exchange (1200–1450)', topics: ['Silk Roads & Indian Ocean routes', 'Black Death spread', 'Diasporic merchant communities'] },
+        { name: 'Unit 3: Land-Based Empires (1450–1750)', topics: ['Ottoman, Safavid, Mughal empires', 'Gunpowder empires', 'Manchu Qing Dynasty', 'European monarchies'] },
+        { name: 'Unit 4: Transoceanic Interconnections (1450–1750)', topics: ['European exploration & colonization', 'Columbian Exchange', 'Atlantic slave trade', 'Silver trade & global commerce'] },
+        { name: 'Unit 5: Revolutions (1750–1900)', topics: ['Enlightenment ideas', 'American & French revolutions', 'Haitian Revolution', 'Latin American independence', 'Industrial Revolution causes & effects'] },
+        { name: 'Unit 6: Consequences of Industrialization (1750–1900)', topics: ['Imperialism in Africa & Asia', 'Responses to colonialism', 'Migration & diaspora', 'Environmental impact of industry'] },
+        { name: 'Unit 7: Global Conflict (1900–present)', topics: ['WWI causes & consequences', 'Russian Revolution', 'WWII & Holocaust', 'Cold War in Asia, Africa, Latin America', 'Decolonization movements'] },
+        { name: 'Unit 8: Cold War & Decolonization (1900–present)', topics: ['Non-Aligned Movement', 'Proxy wars', 'Economic globalization', 'Technological change'] },
+        { name: 'Unit 9: Globalization (1900–present)', topics: ['Economic integration', 'Cultural exchange & resistance', 'Climate & environmental challenges', 'Global health & disease'] },
+      ],
+      frqTypes: ['SAQ: 3 questions (no thesis required)', 'DBQ: 7 documents — HAPP sourcing (Historical situation, Audience, Purpose, Point of view)', 'LEQ: comparison, causation, or continuity & change over time'],
+    },
+    {
+      key: 'apstats', title: 'AP Statistics', subject: 'Math',
+      exam: 'May 2027 · 3 hrs · 40 MCQ + 6 FRQ',
+      cbSlug: 'ap-statistics',
+      units: [
+        { name: 'Unit 1: Exploring One-Variable Data', topics: ['Categorical vs quantitative data', 'Dotplots, histograms, boxplots', 'Mean, median, standard deviation, IQR', 'Normal distribution & z-scores'] },
+        { name: 'Unit 2: Exploring Two-Variable Data', topics: ['Scatterplots & correlation (r)', 'LSRL equation & interpretation', 'Residuals & residual plots', 'Outliers & influential points'] },
+        { name: 'Unit 3: Collecting Data', topics: ['Sampling methods (SRS, stratified, cluster)', 'Observational study vs experiment', 'Randomization, control, replication', 'Sources of bias'] },
+        { name: 'Unit 4: Probability', topics: ['Basic probability rules', 'Conditional probability & independence', 'Discrete random variables (mean, variance)', 'Binomial & geometric distributions'] },
+        { name: 'Unit 5: Sampling Distributions', topics: ['Sampling distribution of x̄ and p̂', 'Central Limit Theorem', 'Standard error', 'Normal approximation conditions'] },
+        { name: 'Unit 6: Inference for Categorical Data', topics: ['1-proportion z-test & interval', '2-proportion z-test', 'Chi-square goodness-of-fit', 'Chi-square test for independence'] },
+        { name: 'Unit 7: Inference for Quantitative Data', topics: ['1-sample t-test & interval', '2-sample t-test', 'Paired t-test', 'Conditions (random, normal, independent)'] },
+        { name: 'Unit 8: Inference for Slopes', topics: ['Inference for regression slope β₁', 't-test for slope', 'Confidence interval for slope', 'Interpreting computer output'] },
+      ],
+      frqTypes: ['FRQ 1–5: Shorter questions (investigative task final)', 'FRQ 6: Investigative Task — multi-part, ~30 min', 'Always: state hypotheses, check conditions, calculate, conclude in context'],
+    },
+    {
+      key: 'apchem', title: 'AP Chemistry', subject: 'Science',
+      exam: 'May 2027 · 3 hrs 15 min · 60 MCQ + 7 FRQ',
+      cbSlug: 'ap-chemistry',
+      units: [
+        { name: 'Unit 1: Atomic Structure', topics: ['Electron configuration & orbitals', 'Photoelectron spectroscopy', 'Periodic trends (atomic radius, IE, EN)', 'Isotopes & mass spectrometry'] },
+        { name: 'Unit 2: Molecular & Ionic Compounds', topics: ['Ionic vs covalent bonding', 'Lewis structures & formal charge', 'VSEPR theory & molecular geometry', 'Polarity & intermolecular forces'] },
+        { name: 'Unit 3: Intermolecular Forces & Properties', topics: ['IMFs: London dispersion, dipole-dipole, H-bonding', 'Properties of solids, liquids, gases', 'Solutions: miscibility, Henry\'s law', 'Colligative properties'] },
+        { name: 'Unit 4: Chemical Reactions', topics: ['Types of reactions', 'Net ionic equations', 'Oxidation states & redox', 'Stoichiometry & limiting reagent'] },
+        { name: 'Unit 5: Kinetics', topics: ['Rate laws & reaction order', 'Integrated rate laws (0, 1st, 2nd order)', 'Half-life', 'Arrhenius equation & activation energy', 'Reaction mechanisms'] },
+        { name: 'Unit 6: Thermodynamics', topics: ['Enthalpy (ΔH) & Hess\'s Law', 'Entropy (ΔS) & Gibbs free energy (ΔG)', 'Spontaneity conditions', 'Bond enthalpies'] },
+        { name: 'Unit 7: Equilibrium', topics: ['Keq expression (omit solids/liquids)', 'Q vs K & reaction direction', 'Le Chatelier\'s Principle', 'ICE tables', 'Acid-base equilibria (Ka, Kb, Kw)'] },
+        { name: 'Unit 8: Acids & Bases', topics: ['pH, pOH, pKa calculations', 'Strong vs weak acids/bases', 'Buffer solutions & Henderson-Hasselbalch', 'Titration curves & equivalence point'] },
+        { name: 'Unit 9: Electrochemistry', topics: ['Galvanic vs electrolytic cells', 'Standard reduction potentials', 'Nernst equation', 'Faraday\'s law & electrolysis'] },
+      ],
+      frqTypes: ['FRQ 1–3: Long (10 pts) — calculations + explanation', 'FRQ 4–7: Short (4 pts) — targeted concept questions', 'Lab FRQ: experimental design, data analysis, error analysis'],
+    },
+    {
+      key: 'apphysics1', title: 'AP Physics 1: Algebra-Based', subject: 'Science',
+      exam: 'May 2027 · 3 hrs · 50 MCQ + 5 FRQ',
+      cbSlug: 'ap-physics-1',
+      units: [
+        { name: 'Unit 1: Kinematics', topics: ['Displacement, velocity, acceleration', 'Kinematic equations (constant a)', 'Projectile motion (components independent)', 'Graphs of motion (slope & area)'] },
+        { name: 'Unit 2: Forces & Newton\'s Laws', topics: ['FBDs — draw every problem first', 'Newton\'s 1st, 2nd (F=ma), 3rd laws', 'Normal force, friction (static vs kinetic)', 'Incline plane components'] },
+        { name: 'Unit 3: Circular Motion & Gravitation', topics: ['Centripetal acceleration (v²/r)', 'Centripetal force sources', 'Universal gravitation (F=Gm₁m₂/r²)', 'Orbital mechanics'] },
+        { name: 'Unit 4: Energy', topics: ['Work-energy theorem', 'KE = ½mv², PE = mgh', 'Conservation of energy', 'Power = W/t'] },
+        { name: 'Unit 5: Momentum', topics: ['Impulse-momentum theorem', 'Conservation of momentum', 'Elastic vs inelastic collisions', 'Center of mass'] },
+        { name: 'Unit 6: Simple Harmonic Motion', topics: ['SHM conditions', 'Period of spring (T=2π√(m/k)) and pendulum (T=2π√(L/g))', 'Energy in SHM', 'Wave properties (λ, f, v=fλ)'] },
+        { name: 'Unit 7: Torque & Rotational Motion', topics: ['Torque = r×F×sinθ', 'Rotational equilibrium', 'Rotational inertia', 'Angular momentum conservation'] },
+      ],
+      frqTypes: ['FRQ 1: Experimental design (must justify)', 'FRQ 2–3: Quantitative (show all work)', 'FRQ 4–5: Short answer with paragraph explanation', 'Lowest pass rate of any AP (47%) — explain conceptually, not just plug numbers'],
+    },
+    {
+      key: 'aplit', title: 'AP English Literature & Composition', subject: 'English',
+      exam: 'May 2027 · 3 hrs · 55 MCQ + 3 FRQ essays',
+      cbSlug: 'ap-english-literature-and-composition',
+      units: [
+        { name: 'Short Fiction', topics: ['Narrative structure & plot', 'Characterization (direct vs indirect)', 'Setting & atmosphere', 'Point of view (1st, 3rd limited, omniscient)', 'Irony (verbal, dramatic, situational)'] },
+        { name: 'Poetry', topics: ['Imagery & sensory detail', 'Figurative language (metaphor, simile, personification)', 'Sound devices (alliteration, assonance, consonance)', 'Tone & speaker', 'Meter & form (sonnet, free verse)', 'Enjambment & caesura'] },
+        { name: 'Longer Fiction & Drama', topics: ['Themes & motifs', 'Symbol & allegory', 'Authorial choices & their effects', 'Social/historical context', 'Character development arc'] },
+        { name: 'Literary Argument (FRQ 3)', topics: ['Choose a work of literary merit', 'Defend, challenge, or qualify a literary claim', 'Use textual evidence from memory', 'Strong thesis + sustained argument'] },
+        { name: 'Essay Skills', topics: ['Thesis: literary argument (not a summary)', 'Evidence: specific quotation or detail', 'Commentary: explain how evidence supports thesis', 'Complexity: acknowledge nuance or counterargument'] },
+      ],
+      frqTypes: ['FRQ 1: Poetry Analysis — analyze how poet uses literary elements', 'FRQ 2: Prose Fiction Analysis — analyze an excerpt for meaning', 'FRQ 3: Literary Argument — argue a claim about a work you choose'],
+    },
+    {
+      key: 'apes', title: 'AP Environmental Science', subject: 'Science',
+      exam: 'May 2027 · 2 hrs 40 min · 80 MCQ + 3 FRQ',
+      cbSlug: 'ap-environmental-science',
+      units: [
+        { name: 'Unit 1: Earth Systems & Resources', topics: ['Plate tectonics & rock cycle', 'Soil formation & horizons', 'Atmosphere layers & composition', 'Global wind patterns & ocean currents', 'El Niño / La Niña'] },
+        { name: 'Unit 2: The Living World', topics: ['Biomes & aquatic systems', 'Ecosystem structure & function', 'Energy flow & trophic efficiency (10% rule)', 'Biogeochemical cycles (C, N, P, water)', 'Biodiversity metrics'] },
+        { name: 'Unit 3: Populations', topics: ['Exponential vs logistic growth', 'Carrying capacity & limiting factors', 'Age-structure diagrams', 'Human population growth & demographic transition'] },
+        { name: 'Unit 4: Earth & Earth Resources', topics: ['Soil degradation & erosion', 'Agricultural practices (irrigation, pesticides, GMOs)', 'Mining impacts', 'Deforestation & land use'] },
+        { name: 'Unit 5: Energy Resources & Consumption', topics: ['Fossil fuels — extraction & impacts', 'Nuclear energy (fission, waste)', 'Solar, wind, hydro, geothermal', 'CAFE standards & energy efficiency', 'Energy return on energy investment (EROEI)'] },
+        { name: 'Unit 6: Pollution', topics: ['Air pollution (criteria pollutants, photochemical smog, acid rain)', 'Stratospheric ozone depletion (CFCs)', 'Water pollution (eutrophication, thermal, oil spills)', 'Solid & hazardous waste (Superfund)', 'Noise & light pollution'] },
+        { name: 'Unit 7: Global Change', topics: ['Climate change mechanisms (greenhouse effect)', 'Evidence & consequences of warming', 'International agreements (Kyoto, Paris)', 'Environmental legislation (Clean Air Act, Clean Water Act, ESA, CITES)', 'Sustainability solutions'] },
+      ],
+      frqTypes: ['FRQ 1: Data analysis (graph/table interpretation + calculation)', 'FRQ 2: Document-based (evaluate proposed solution)', 'FRQ 3: Argument essay (defend or refute an environmental claim)', 'Calculations required: per capita, percent change, energy units'],
+    },
+    {
+      key: 'apcsa', title: 'AP Computer Science A', subject: 'CS',
+      exam: 'May 2027 · 3 hrs · 40 MCQ + 4 FRQ',
+      cbSlug: 'ap-computer-science-a',
+      units: [
+        { name: 'Unit 1: Primitive Types', topics: ['int, double, boolean', 'Integer division & casting', 'String literals vs String objects', 'Arithmetic operators & precedence'] },
+        { name: 'Unit 2: Using Objects', topics: ['String methods: length(), substring(), indexOf(), equals(), compareTo()', 'Math methods: Math.abs(), Math.pow(), Math.sqrt(), Math.random()', 'Wrapper classes: Integer, Double'] },
+        { name: 'Unit 3: Boolean Expressions & If Statements', topics: ['Relational & logical operators (&&, ||, !)', 'if / else if / else chains', 'Compound boolean expressions', 'De Morgan\'s Law'] },
+        { name: 'Unit 4: Iteration', topics: ['while loops', 'for loops', 'Nested loops', 'do-while loops', 'Common loop patterns (accumulator, search, count)'] },
+        { name: 'Unit 5: Writing Classes', topics: ['Instance variables & constructors', 'Methods with parameters & return values', 'this keyword', 'Static vs instance members', 'Encapsulation (private/public)'] },
+        { name: 'Unit 6–7: Arrays & ArrayList', topics: ['1D array declaration, creation, access', 'Array traversal with for & for-each', 'ArrayList<E>: add(), remove(), get(), set(), size()', '2D arrays — row-major traversal'] },
+        { name: 'Unit 8–10: Inheritance & Recursion', topics: ['extends & super keyword', 'Method overriding & polymorphism', 'Abstract classes vs interfaces (concept)', 'Recursion: base case + recursive case', 'Recursive trace-through'] },
+      ],
+      frqTypes: ['FRQ 1: Methods & Control Structures', 'FRQ 2: Class design (write a complete class)', 'FRQ 3: Array/ArrayList manipulation', 'FRQ 4: 2D Array or recursion problem', 'All code must be valid Java syntax'],
+    },
+  ];
+
+  // Build a card for each course
+  function buildCards() {
+    const grid = document.getElementById('printCardsGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    printCourses.forEach(course => {
+      const card = document.createElement('div');
+      card.className = 'print-card';
+      card.innerHTML =
+        '<div class="print-card-subject">' + course.subject + '</div>' +
+        '<div class="print-card-title">' + course.title + '</div>' +
+        '<div class="print-card-meta">' + course.exam + '<br>' + course.units.length + ' units · ' + course.units.reduce((a,u) => a + u.topics.length, 0) + ' key topics</div>' +
+        '<div class="print-card-actions">' +
+          '<button class="print-btn print-btn-primary" data-key="' + course.key + '">🖨️ Print Study Guide</button>' +
+          '<a class="print-btn print-btn-outline" href="https://apcentral.collegeboard.org/courses/' + course.cbSlug + '/exam/past-exam-questions" target="_blank" rel="noopener">📄 CB FRQs ↗</a>' +
+        '</div>';
+      grid.appendChild(card);
+    });
+
+    // Wire print buttons
+    grid.querySelectorAll('[data-key]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        printGuide(this.dataset.key);
+      });
+    });
+  }
+
+  // Generate and print a study guide for one course
+  function printGuide(key) {
+    const course = printCourses.find(c => c.key === key);
+    if (!course) return;
+
+    const frame = document.getElementById('printFrame');
+
+    const html = `
+      <div class="print-page" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#111;max-width:750px;margin:0 auto;padding:24px;">
+
+        <div style="border-bottom:3px solid #e8650a;padding-bottom:12px;margin-bottom:20px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#e8650a;margin-bottom:4px;">${course.subject} · CHS Study Tools</div>
+          <h1 style="font-size:22px;font-weight:900;margin:0 0 4px;">${course.title}</h1>
+          <div style="font-size:12px;color:#555;">${course.exam} &nbsp;·&nbsp; <a href="https://apcentral.collegeboard.org/courses/${course.cbSlug}/exam/past-exam-questions" style="color:#e8650a;">Official FRQs on College Board ↗</a></div>
+        </div>
+
+        <h2 style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#e8650a;margin:0 0 14px;">Unit Overview &amp; Key Topics</h2>
+
+        ${course.units.map((u, i) => `
+          <div style="margin-bottom:16px;page-break-inside:avoid;">
+            <div style="font-size:13px;font-weight:800;color:#111;background:#f5f0e8;padding:6px 10px;border-left:4px solid #e8650a;margin-bottom:6px;">${u.name}</div>
+            <ul style="margin:0;padding-left:20px;display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">
+              ${u.topics.map(t => `<li style="font-size:11.5px;line-height:1.6;color:#222;">${t}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('')}
+
+        <div style="margin-top:20px;border-top:2px solid #e8ddd0;padding-top:14px;page-break-inside:avoid;">
+          <h2 style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#e8650a;margin:0 0 10px;">FRQ / Essay Types on the Exam</h2>
+          <ul style="margin:0;padding-left:20px;">
+            ${course.frqTypes.map(f => `<li style="font-size:12px;line-height:1.7;color:#222;">${f}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div style="margin-top:20px;border-top:2px solid #e8ddd0;padding-top:14px;page-break-inside:avoid;">
+          <h2 style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#e8650a;margin:0 0 10px;">Semester Study Schedule</h2>
+          <table style="width:100%;border-collapse:collapse;font-size:11.5px;">
+            <thead>
+              <tr style="background:#f5f0e8;">
+                <th style="padding:6px 8px;text-align:left;border:1px solid #e8ddd0;">Week</th>
+                <th style="padding:6px 8px;text-align:left;border:1px solid #e8ddd0;">Focus</th>
+                <th style="padding:6px 8px;text-align:left;border:1px solid #e8ddd0;">Practice</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${Array.from({length: 8}, (_, i) => {
+                const unitIdx = Math.floor(i * course.units.length / 8);
+                const u = course.units[Math.min(unitIdx, course.units.length - 1)];
+                const practices = ['MCQ practice (20 questions)', 'Review notes + flashcards', 'Past FRQ from College Board', 'Timed FRQ (full exam conditions)', 'Mixed MCQ + FRQ', 'Concept map from memory', 'Full practice section', 'Peer explain a concept'];
+                return `<tr>
+                  <td style="padding:5px 8px;border:1px solid #e8ddd0;color:#555;">Week ${i+1}</td>
+                  <td style="padding:5px 8px;border:1px solid #e8ddd0;">${u.name.split(':')[0]}</td>
+                  <td style="padding:5px 8px;border:1px solid #e8ddd0;color:#555;">${practices[i]}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:20px;background:#f5f0e8;border-radius:8px;padding:12px 16px;font-size:11px;color:#555;page-break-inside:avoid;">
+          <strong style="color:#e8650a;">How to use this guide:</strong>
+          Fill in the "Practice" column as you go. Before each exam, cover the right column and recite from memory. Get official past FRQs at
+          <a href="https://apcentral.collegeboard.org/courses/${course.cbSlug}/exam/past-exam-questions" style="color:#e8650a;">apcentral.collegeboard.org</a>.
+          Score yourself with the posted scoring guidelines.
+        </div>
+
+        <div style="margin-top:16px;font-size:10px;color:#aaa;text-align:center;">
+          Generated by CHS Study Tools · kenden17.github.io/StudyTools · Content based on College Board AP Course & Exam Description
+        </div>
+      </div>
+    `;
+
+    frame.innerHTML = html;
+    window.print();
+    // Clean up after print dialog closes
+    setTimeout(function() { frame.innerHTML = ''; }, 1000);
+  }
+
+  // Build cards when panel opens
+  const _prev = window.showPanel;
+  window.showPanel = function(id) {
+    _prev(id);
+    if (id === 'printables') buildCards();
+  };
+
+  // Also build if panel is already active on load
+  if (location.hash === '#printables') buildCards();
 
 })();
 

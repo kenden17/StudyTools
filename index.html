@@ -1155,7 +1155,93 @@
       .print-page { padding: 0; margin: 0; }
     }
 
+    /* =========================================================
+       STREAK TRACKER
+    ========================================================= */
+    .streak-badge {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 99px; padding: 6px 12px; font-size: .82rem;
+      font-weight: 700; color: var(--text); cursor: pointer; min-height: 36px;
+      transition: background var(--transition), border-color var(--transition);
+      white-space: nowrap;
+    }
+    .streak-badge:hover, .streak-badge.on { border-color: #f97316; color: #f97316; }
+    .streak-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .streak-stat {
+      background: var(--surface2); border-radius: 10px;
+      padding: 12px 10px; text-align: center; border: 1.5px solid var(--border);
+    }
+    .streak-stat-val { font-size: 1.4rem; font-weight: 900; color: #f97316; }
+    .streak-stat-label { font-size: .65rem; color: var(--muted); font-weight: 600;
+      text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+    .streak-dots { display: flex; gap: 4px; flex-wrap: wrap; }
+    .streak-dot { width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .55rem; font-weight: 700; flex-shrink: 0; }
+    .streak-dot.on  { background: #f97316; color: #fff; }
+    .streak-dot.off { background: var(--surface2); border: 1.5px solid var(--border); }
+    .streak-dot.now { background: #f97316; color: #fff; box-shadow: 0 0 0 3px rgba(249,115,22,.35); }
+    .streak-msg { font-size: .82rem; color: var(--muted); line-height: 1.55;
+      background: var(--surface2); border-radius: 10px; padding: 12px 14px;
+      border-left: 3px solid #f97316; }
+    /* STREAK TRACKER */
+    .streak-badge { display:flex;align-items:center;gap:5px;background:var(--surface2);border:1.5px solid var(--border);border-radius:99px;padding:6px 12px;font-size:.82rem;font-weight:700;color:var(--text);cursor:pointer;min-height:36px;transition:background var(--transition),border-color var(--transition);white-space:nowrap; }
+    .streak-badge:hover,.streak-badge.on { border-color:#f97316;color:#f97316; }
+    .streak-stats { display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px; }
+    .streak-stat { background:var(--surface2);border-radius:10px;padding:12px 10px;text-align:center;border:1.5px solid var(--border); }
+    .streak-stat-val { font-size:1.4rem;font-weight:900;color:#f97316; }
+    .streak-stat-label { font-size:.65rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:2px; }
+    .streak-dots { display:flex;gap:4px;flex-wrap:wrap; }
+    .streak-dot { width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;flex-shrink:0; }
+    .streak-dot.on { background:#f97316;color:#fff; }
+    .streak-dot.off { background:var(--surface2);border:1.5px solid var(--border); }
+    .streak-dot.now { background:#f97316;color:#fff;box-shadow:0 0 0 3px rgba(249,115,22,.35); }
+    .streak-msg { font-size:.82rem;color:var(--muted);line-height:1.55;background:var(--surface2);border-radius:10px;padding:12px 14px;border-left:3px solid #f97316; }
   </style>
+    /* =========================================================
+       STREAK TRACKER
+    ========================================================= */
+    .streak-badge {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 99px; padding: 6px 12px; font-size: .82rem;
+      font-weight: 700; color: var(--text); cursor: pointer; min-height: 36px;
+      transition: background var(--transition), border-color var(--transition);
+      white-space: nowrap;
+    }
+    .streak-badge:hover, .streak-badge.on { border-color: #f97316; color: #f97316; }
+    .streak-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .streak-stat {
+      background: var(--surface2); border-radius: 10px;
+      padding: 12px 10px; text-align: center; border: 1.5px solid var(--border);
+    }
+    .streak-stat-val { font-size: 1.4rem; font-weight: 900; color: #f97316; }
+    .streak-stat-label { font-size: .65rem; color: var(--muted); font-weight: 600;
+      text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+    .streak-dots { display: flex; gap: 4px; flex-wrap: wrap; }
+    .streak-dot { width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .55rem; font-weight: 700; flex-shrink: 0; }
+    .streak-dot.on  { background: #f97316; color: #fff; }
+    .streak-dot.off { background: var(--surface2); border: 1.5px solid var(--border); }
+    .streak-dot.now { background: #f97316; color: #fff; box-shadow: 0 0 0 3px rgba(249,115,22,.35); }
+    .streak-msg { font-size: .82rem; color: var(--muted); line-height: 1.55;
+      background: var(--surface2); border-radius: 10px; padding: 12px 14px;
+      border-left: 3px solid #f97316; }
+    /* STREAK TRACKER */
+    .streak-badge { display:flex;align-items:center;gap:5px;background:var(--surface2);border:1.5px solid var(--border);border-radius:99px;padding:6px 12px;font-size:.82rem;font-weight:700;color:var(--text);cursor:pointer;min-height:36px;transition:background var(--transition),border-color var(--transition);white-space:nowrap; }
+    .streak-badge:hover,.streak-badge.on { border-color:#f97316;color:#f97316; }
+    .streak-stats { display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px; }
+    .streak-stat { background:var(--surface2);border-radius:10px;padding:12px 10px;text-align:center;border:1.5px solid var(--border); }
+    .streak-stat-val { font-size:1.4rem;font-weight:900;color:#f97316; }
+    .streak-stat-label { font-size:.65rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:2px; }
+    .streak-dots { display:flex;gap:4px;flex-wrap:wrap; }
+    .streak-dot { width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;flex-shrink:0; }
+    .streak-dot.on { background:#f97316;color:#fff; }
+    .streak-dot.off { background:var(--surface2);border:1.5px solid var(--border); }
+    .streak-dot.now { background:#f97316;color:#fff;box-shadow:0 0 0 3px rgba(249,115,22,.35); }
+    .streak-msg { font-size:.82rem;color:var(--muted);line-height:1.55;background:var(--surface2);border-radius:10px;padding:12px 14px;border-left:3px solid #f97316; }
   </style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -1185,6 +1271,8 @@
     <button class="nav-link" data-panel="printables">Printables</button>
   </div>
   <div class="nav-right">
+    <button class="streak-badge" id="streakBadge" aria-label="Study streak" onclick="showPanel('home')">&#x1F525;<span id="streakBadgeNum" style="margin-left:3px;">?</span></button>
+    <button class="streak-badge" id="streakBadge" aria-label="Study streak" onclick="showPanel('home')">🔥<span id="streakBadgeNum" style="margin-left:3px;">—</span></button>
     <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
   </div>
 </nav>
@@ -1295,6 +1383,22 @@
       <div class="dash-card-title">⏳ AP Exam Countdown — 2027</div>
       <p style="font-size:.75rem;color:var(--muted);margin-top:-8px;">Click any exam to open its study guide.</p>
       <div class="countdown-list" id="countdownList"></div>
+    </div>
+
+    <!-- Streak Card -->
+    <div class="dash-card" id="streakCard">
+      <div class="dash-card-title">🔥 Study Streak</div>
+      <div style="display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#f97316,#ea580c);border-radius:12px;padding:16px 20px;color:#fff;">
+        <div style="font-size:2.6rem;line-height:1;">🔥</div>
+        <div><div id="streakNum" style="font-size:2.6rem;font-weight:900;line-height:1;">—</div><div style="font-size:.75rem;opacity:.85;margin-top:2px;">day streak</div></div>
+      </div>
+      <div class="streak-stats">
+        <div class="streak-stat"><div class="streak-stat-val" id="streakToday">—</div><div class="streak-stat-label">Today</div></div>
+        <div class="streak-stat"><div class="streak-stat-val" id="streakLongest">—</div><div class="streak-stat-label">Best</div></div>
+        <div class="streak-stat"><div class="streak-stat-val" id="streakTotal">—</div><div class="streak-stat-label">Total Days</div></div>
+      </div>
+      <div><div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px;">Last 30 Days</div><div class="streak-dots" id="streakDots"></div></div>
+      <div class="streak-msg" id="streakMsg"></div>
     </div>
     <!-- Three primary cards -->
     <div class="dash-primary">
@@ -3979,6 +4083,129 @@ setTimeout(function() { loadGuides(); }, 1500);
 
 })();
 
+// =========================================================
+// STREAK TRACKER
+// =========================================================
+(function initStreak() {
+  var KEY_DATE    = 'streak_last';
+  var KEY_COUNT   = 'streak_count';
+  var KEY_LONGEST = 'streak_longest';
+  var KEY_TOTAL   = 'streak_total';
+  var KEY_HISTORY = 'streak_history';  // JSON array of 'YYYY-MM-DD' strings
+  function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+  function daysBetween(a, b) {
+    // a, b are 'YYYY-MM-DD' strings; returns b - a in days
+    var da = new Date(a + 'T00:00:00');
+    var db = new Date(b + 'T00:00:00');
+    return Math.round((db - da) / 86400000);
+  }
+  function load() {
+    var today    = todayStr();
+    var lastDate = localStorage.getItem(KEY_DATE) || '';
+    var count    = parseInt(localStorage.getItem(KEY_COUNT)   || '0', 10);
+    var longest  = parseInt(localStorage.getItem(KEY_LONGEST) || '0', 10);
+    var total    = parseInt(localStorage.getItem(KEY_TOTAL)   || '0', 10);
+    var history  = JSON.parse(localStorage.getItem(KEY_HISTORY) || '[]');
+    var isNew = false;
+    if (!lastDate) {
+      // First ever visit
+      count = 1; total = 1; isNew = true;
+    } else if (lastDate === today) {
+      // Already checked in today ? no change
+    } else {
+      var diff = daysBetween(lastDate, today);
+      if (diff === 1) {
+        // Consecutive day
+        count++; isNew = true;
+      } else {
+        // Missed a day ? reset
+        count = 1; isNew = true;
+      }
+      if (isNew) total++;
+    }
+    if (isNew || !lastDate) {
+      if (!history.includes(today)) history.push(today);
+      // Keep only last 60 days
+      if (history.length > 60) history = history.slice(-60);
+      if (count > longest) longest = count;
+      localStorage.setItem(KEY_DATE,    today);
+      localStorage.setItem(KEY_COUNT,   String(count));
+      localStorage.setItem(KEY_LONGEST, String(longest));
+      localStorage.setItem(KEY_TOTAL,   String(total));
+      localStorage.setItem(KEY_HISTORY, JSON.stringify(history));
+    }
+    return { today: today, count: count, longest: longest, total: total, history: history };
+  }
+  function getMessage(count) {
+    if (count === 1)  return 'Day 1 ? you showed up. That already puts you ahead.';
+    if (count < 4)   return count + ' days in a row. Early streaks are the hardest ? keep it going.';
+    if (count < 8)   return count + ' days straight. You\'re building a real habit now.';
+    if (count < 15)  return count + ' days ? two solid weeks of showing up. Impressive.';
+    if (count < 30)  return count + ' days! You\'re in the top tier of consistent students.';
+    if (count < 60)  return count + ' days on a streak. Colleges notice this kind of dedication.';
+    return count + ' days. Legendary. You probably don\'t even need this reminder anymore.';
+  }
+  function render(data) {
+    // Nav badge
+    var badge = document.getElementById('streakBadge');
+    var badgeNum = document.getElementById('streakBadgeNum');
+    if (badgeNum) badgeNum.textContent = data.count;
+    if (badge) badge.classList.toggle('on', data.count >= 2);
+    // Dashboard card numbers
+    var el = function(id) { return document.getElementById(id); };
+    if (el('streakNum'))     el('streakNum').textContent     = data.count;
+    if (el('streakToday'))   el('streakToday').textContent   = data.today.slice(5).replace('-', '/');
+    if (el('streakLongest')) el('streakLongest').textContent = data.longest;
+    if (el('streakTotal'))   el('streakTotal').textContent   = data.total;
+    if (el('streakMsg'))     el('streakMsg').textContent     = getMessage(data.count);
+    // 30-day dot grid
+    var dotsEl = el('streakDots');
+    if (dotsEl) {
+      dotsEl.innerHTML = '';
+      for (var i = 29; i >= 0; i--) {
+        var d = new Date();
+        d.setDate(d.getDate() - i);
+        var ds = d.getFullYear() + '-' +
+          String(d.getMonth() + 1).padStart(2, '0') + '-' +
+          String(d.getDate()).padStart(2, '0');
+        var dot = document.createElement('div');
+        var isToday   = ds === data.today;
+        var visited   = data.history.includes(ds);
+        dot.className = 'streak-dot ' + (isToday ? 'now' : visited ? 'on' : 'off');
+        dot.title     = ds;
+        dot.textContent = isToday ? '?' : (visited ? '?' : '');
+        dotsEl.appendChild(dot);
+      }
+    }
+  }
+  var data = load();
+  render(data);
+})();
+
+// STREAK TRACKER
+(function initStreak() {
+  var KD="streak_last",KC="streak_count",KL="streak_longest",KT="streak_total",KH="streak_history";
+  function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function diff(a,b){return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000);}
+  function msg(n){if(n===1)return 'Day 1 — you showed up. That already puts you ahead.';if(n<4)return n+' days in. Early streaks are hardest — keep going.';if(n<8)return n+' days straight. You're building a real habit.';if(n<15)return n+' days — two solid weeks of showing up.';if(n<30)return n+' days! Top tier of consistent students.';if(n<60)return n+' days. Colleges notice this kind of dedication.';return n+' days. Legendary.'}
+  var t=today(),last=localStorage.getItem(KD)||'',cnt=parseInt(localStorage.getItem(KC)||'0'),lon=parseInt(localStorage.getItem(KL)||'0'),tot=parseInt(localStorage.getItem(KT)||'0'),hist=JSON.parse(localStorage.getItem(KH)||'[]');
+  if(!last){cnt=1;tot=1;}else if(last!==t){var d=diff(last,t);cnt=(d===1)?cnt+1:1;tot++;}
+  if(last!==t){if(!hist.includes(t))hist.push(t);if(hist.length>60)hist=hist.slice(-60);if(cnt>lon)lon=cnt;localStorage.setItem(KD,t);localStorage.setItem(KC,String(cnt));localStorage.setItem(KL,String(lon));localStorage.setItem(KT,String(tot));localStorage.setItem(KH,JSON.stringify(hist));}
+  function el(id){return document.getElementById(id);}
+  var b=el('streakBadge'),bn=el('streakBadgeNum');
+  if(bn)bn.textContent=cnt;if(b)b.classList.toggle('on',cnt>=2);
+  if(el('streakNum'))el('streakNum').textContent=cnt;
+  if(el('streakToday'))el('streakToday').textContent=t.slice(5).replace('-','/' );
+  if(el('streakLongest'))el('streakLongest').textContent=lon;
+  if(el('streakTotal'))el('streakTotal').textContent=tot;
+  if(el('streakMsg'))el('streakMsg').textContent=msg(cnt);
+  var dd=el('streakDots');if(dd){dd.innerHTML='';for(var i=29;i>=0;i--){var dobj=new Date();dobj.setDate(dobj.getDate()-i);var ds=dobj.getFullYear()+'-'+String(dobj.getMonth()+1).padStart(2,'0')+'-'+String(dobj.getDate()).padStart(2,'0');var dot=document.createElement('div');dot.className='streak-dot '+(ds===t?'now':hist.includes(ds)?'on':'off');dot.title=ds;dot.textContent=ds===t?'★':(hist.includes(ds)?'✓':'');dd.appendChild(dot);}}
+})();
 </script>
 </body>
 </html>

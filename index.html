@@ -561,10 +561,10 @@
     ========================================================= */
     .gpa-rows { display: flex; flex-direction: column; gap: 8px; }
     .gpa-header { display: grid; grid-template-columns: 1fr 80px 70px 36px; gap: 6px; padding: 0 2px; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
-    .gpa-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .gpa-row input  { flex: 2; min-width: 80px; }
-    .gpa-row select { flex: 1; min-width: 80px; }
-    .gpa-row button { background: none; border: none; color: var(--red); font-size: 1.1rem; flex-shrink: 0; min-width: 36px; min-height: 36px; }
+    .gpa-row { display: grid; grid-template-columns: 1fr 80px 70px 36px; gap: 6px; align-items: center; }
+    .gpa-row input  { width: 100%; }
+    .gpa-row select { width: 100%; }
+    .gpa-row button { background: none; border: none; color: var(--red); font-size: 1.1rem; min-height: 36px; padding: 0; }
     .gpa-result {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       border-radius: 12px; padding: 20px; text-align: center; color: #fff;

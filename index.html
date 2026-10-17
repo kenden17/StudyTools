@@ -1756,9 +1756,7 @@
   <button style="background:none;border:none;color:var(--accent);font-size:.8rem;cursor:pointer;font-family:inherit;" onclick="showPanel('home')">Home</button>
 </footer>
 
-<script>var _dbgEl=null;function _log(m){if(!_dbgEl){_dbgEl=document.createElement('div');_dbgEl.style.cssText='position:fixed;bottom:80px;left:8px;right:8px;background:rgba(0,0,0,.88);color:#0f0;font:11px monospace;padding:8px;border-radius:8px;z-index:99999;max-height:180px;overflow-y:auto;';document.body.appendChild(_dbgEl);}var t=document.createElement('div');t.textContent=m;_dbgEl.appendChild(t);_dbgEl.scrollTop=_dbgEl.scrollHeight;}window.onerror=function(msg,src,line){_log('ERR:'+msg+' L'+line);};_log('start');
-
-// =========================================================
+<script>// =========================================================
 // SPA ROUTER
 // =========================================================
 function showPanel(id) {
@@ -1811,7 +1809,6 @@ if (moreTabBtn && moreSheet) {
 // Show panel from hash or default to home
 const startPanel = location.hash.slice(1) || 'home';
 showPanel(startPanel);
-_log('router ok');
 
 // =========================================================
 // THEME
@@ -1869,7 +1866,6 @@ function pomoToggle() {
     document.getElementById('pomoStart').textContent = '▶ Resume';
   } else {
     if (pomoRemaining === 0) pomoReset();
-_log('pomo ok');
     pomoRunning = true;
     document.getElementById('pomoStart').textContent = '⏸ Pause';
     pomoInterval = setInterval(() => {
@@ -1881,14 +1877,14 @@ _log('pomo ok');
             clearInterval(pomoInterval); pomoRunning = false;
             document.getElementById('pomoStart').textContent = '▶ Start';
             document.getElementById('pomoMode').textContent = '🎉 Done!';
-            if (Notification.permission === 'granted') new Notification('CHS Study Tools', { body: 'All sessions complete! Great work, Bulldog! 🐾' });
+            if (typeof Notification !== 'undefined' && Notification.permission === 'granted') new Notification('CHS Study Tools', { body: 'All sessions complete! Great work, Bulldog! 🐾' });
             return;
           }
           pomoIsFocus = false; pomoTotal = v.brk * 60;
-          if (Notification.permission === 'granted') new Notification('CHS Study Tools', { body: 'Break time!' });
+          if (typeof Notification !== 'undefined' && Notification.permission === 'granted') new Notification('CHS Study Tools', { body: 'Break time!' });
         } else {
           pomoSession++; pomoIsFocus = true; pomoTotal = v.focus * 60;
-          if (Notification.permission === 'granted') new Notification('CHS Study Tools', { body: 'Focus time!' });
+          if (typeof Notification !== 'undefined' && Notification.permission === 'granted') new Notification('CHS Study Tools', { body: 'Focus time!' });
         }
         pomoRemaining = pomoTotal;
       }
@@ -1897,7 +1893,7 @@ _log('pomo ok');
   }
 }
 // Request notification permission
-if (Notification && Notification.permission === 'default') Notification.requestPermission();
+if (typeof Notification !== 'undefined' && Notification.permission === 'default') Notification.requestPermission();
 pomoReset();
 
 // =========================================================
@@ -1995,7 +1991,6 @@ function gpaCalc() {
 
 // Seed 3 default rows
 gpaAddRow(); gpaAddRow(); gpaAddRow();
-_log('gpa ok');
 
 // =========================================================
 // UNIT CONVERTER
@@ -2160,7 +2155,6 @@ function buildFormulas() {
   }
 }
 buildFormulas();
-_log('formulas ok');
 
 // =========================================================
 // ESSAY OUTLINE
@@ -2215,7 +2209,6 @@ function buildDefaultBodies() {
   }
 }
 buildDefaultBodies();
-_log('essay ok');
 
 function essayCount() {
   const all = document.querySelectorAll('#essay textarea');
@@ -2559,7 +2552,6 @@ function buildDiffGuide() {
   });
 }
 buildDiffGuide();
-_log('diff ok');
 
 // =========================================================
 // PERIODIC TABLE
@@ -2783,7 +2775,6 @@ function ptFilter() {
 }
 
 ptBuild();
-_log('pt ok');
 
 // =========================================================
 // STUDY TIPS
@@ -2920,7 +2911,6 @@ function buildTips() {
 // Ensure all builders that were called at the bottom of the old script are called
 // (most are already called inline; explicitly call any that weren't)
 buildTips();
-_log('tips ok');
 buildDiffGuide();
 ptBuild();
 
@@ -3253,7 +3243,6 @@ function quizRestart(id) {
 
 
 initDashboard();
-_log('dashboard ok');
 
 // Lazy-load guide data only when needed — keeps the page fast on iOS Safari
 let guidesLoaded = false;

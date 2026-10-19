@@ -2006,7 +2006,7 @@ pomoReset();
 // =========================================================
 // FLASHCARDS
 // =========================================================
-let fcCards = [];
+let fcCards = JSON.parse(localStorage.getItem('fc_cards') || '[]');
 let fcIndex = 0;
 let fcFlipped = false;
 
@@ -2042,11 +2042,13 @@ function fcAdd() {
   document.getElementById('fcQuestion').value = '';
   document.getElementById('fcAnswer').value = '';
   fcIndex = fcCards.length - 1;
-  fcRender();
+  fcRender(); fcSave();
 }
 
-function fcDelete(i) { fcCards.splice(i, 1); fcIndex = Math.min(fcIndex, fcCards.length - 1); fcRender(); }
-function fcClear() { if (fcCards.length && confirm('Delete all cards?')) { fcCards = []; fcIndex = 0; fcRender(); } }
+function fcDelete(i) { fcCards.splice(i, 1); fcIndex = Math.min(fcIndex, fcCards.length - 1); fcRender(); fcSave(); }
+function fcClear() { if (fcCards.length && confirm('Delete all cards?')) { fcCards = []; fcIndex = 0; fcRender(); fcSave(); } }
+
+function fcSave() { try { localStorage.setItem('fc_cards', JSON.stringify(fcCards)); } catch(e) {} }
 
 function renderFcList() {
   const el = document.getElementById('fcList');
@@ -2370,7 +2372,7 @@ function essayCopy() {
 // =========================================================
 // TO-DO LIST
 // =========================================================
-let todos = [];
+let todos = JSON.parse(localStorage.getItem('todo_items') || '[]');
 
 function todoAdd() {
   const text = document.getElementById('todoInput').value.trim();
@@ -2379,22 +2381,28 @@ function todoAdd() {
   todos.push({ id: Date.now(), text, priority, done: false });
   document.getElementById('todoInput').value = '';
   todoRender();
+  todoSave();
 }
 
 function todoToggle(id) {
   const t = todos.find(t => t.id === id);
   if (t) { t.done = !t.done; todoRender(); }
+  todoSave();
 }
 
 function todoDelete(id) {
   todos = todos.filter(t => t.id !== id);
   todoRender();
+  todoSave();
 }
 
 function todoClearDone() {
   todos = todos.filter(t => !t.done);
   todoRender();
+  todoSave();
 }
+
+function todoSave() { try { localStorage.setItem('todo_items', JSON.stringify(todos)); } catch(e) {} }
 
 function todoRender() {
   const el = document.getElementById('todoList');
@@ -2424,6 +2432,11 @@ todoRender();
 // =========================================================
 // SCRATCH NOTEPAD
 // =========================================================
+// Restore saved note
+(function(){ var n=localStorage.getItem('notes_content'); if(n) document.getElementById('scratchPad').value=n; noteCount(); })();
+
+function noteSave() { try { localStorage.setItem('notes_content', document.getElementById('scratchPad').value); } catch(e) {} }
+
 function noteCount() {
   const v = document.getElementById('scratchPad').value;
   const words = v.trim().split(/\s+/).filter(w => w.length > 0).length;
@@ -4007,6 +4020,13 @@ setTimeout(function() { loadGuides(); }, 1500);
 
 // STREAK TRACKER
 (function(){var KD="streak_last",KC="streak_count",KL="streak_longest",KT="streak_total",KH="streak_history";function td(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}function df(a,b){return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000);}function mg(n){if(n===1)return 'Day 1 - you showed up.';if(n<4)return n+' days in a row. Keep going.';if(n<8)return n+' days straight. Building a real habit.';if(n<15)return n+' days. Two solid weeks of showing up.';if(n<30)return n+' days! Top tier of consistent students.';if(n<60)return n+' days. Colleges notice this dedication.';return n+' days. Legendary.';}var t=td(),last=localStorage.getItem(KD)||'',cnt=parseInt(localStorage.getItem(KC)||'0'),lon=parseInt(localStorage.getItem(KL)||'0'),tot=parseInt(localStorage.getItem(KT)||'0'),hist=JSON.parse(localStorage.getItem(KH)||'[]');if(!last){cnt=1;tot=1;}else if(last!==t){var d2=df(last,t);cnt=(d2===1)?cnt+1:1;tot++;}if(last!==t){if(!hist.includes(t))hist.push(t);if(hist.length>60)hist=hist.slice(-60);if(cnt>lon)lon=cnt;localStorage.setItem(KD,t);localStorage.setItem(KC,String(cnt));localStorage.setItem(KL,String(lon));localStorage.setItem(KT,String(tot));localStorage.setItem(KH,JSON.stringify(hist));}function ge(id){return document.getElementById(id);}var b=ge('streakBadge'),bn=ge('streakBadgeNum');if(bn)bn.textContent=cnt;if(b)b.classList.toggle('on',cnt>=2);if(ge('streakNum'))ge('streakNum').textContent=cnt;if(ge('streakToday'))ge('streakToday').textContent=t.slice(5).replace('-','/' );if(ge('streakLongest'))ge('streakLongest').textContent=lon;if(ge('streakTotal'))ge('streakTotal').textContent=tot;if(ge('streakMsg'))ge('streakMsg').textContent=mg(cnt);var dd=ge('streakDots');if(dd){dd.innerHTML='';for(var i=29;i>=0;i--){var dobj=new Date();dobj.setDate(dobj.getDate()-i);var ds=dobj.getFullYear()+'-'+String(dobj.getMonth()+1).padStart(2,'0')+'-'+String(dobj.getDate()).padStart(2,'0');var dot=document.createElement('div');dot.className='streak-dot '+(ds===t?'now':hist.includes(ds)?'on':'off');dot.title=ds;dot.textContent=ds===t?'*':(hist.includes(ds)?'v':'');dd.appendChild(dot);}}})();
+
+// Safety net: save everything on page unload
+window.addEventListener('beforeunload', function() {
+  fcSave();
+  todoSave();
+  noteSave();
+});
 </script>
 </body>
 </html>

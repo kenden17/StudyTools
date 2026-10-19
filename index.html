@@ -560,8 +560,8 @@
        GPA CALCULATOR
     ========================================================= */
     .gpa-rows { display: flex; flex-direction: column; gap: 8px; }
-    .gpa-header { display: grid; grid-template-columns: 1fr 72px 130px 60px 36px; gap: 6px; padding: 0 2px; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
-    .gpa-row { display: grid; grid-template-columns: 1fr 72px 130px 60px 36px; gap: 6px; align-items: center; }
+    .gpa-header { display: grid; grid-template-columns: 1fr 72px 1fr 36px; gap: 6px; padding: 0 2px; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+    .gpa-row { display: grid; grid-template-columns: 1fr 72px 1fr 36px; gap: 6px; align-items: center; }
     .gpa-row input  { width: 100%; }
     .gpa-row select { width: 100%; }
     .gpa-row button { background: none; border: none; color: var(--red); font-size: 1.1rem; min-height: 36px; padding: 0; }
@@ -1346,7 +1346,7 @@
         <div class="dash-card-title">GPA Calculator</div>
         <div class="gpa-result" style="padding:8px 0 2px;">
           <div class="gpa-val" id="dashGpaVal" style="font-size:2.2rem;">—</div>
-          <div class="gpa-label">Weighted GPA (5.0 scale for AP)</div>
+          <div class="gpa-label">Weighted GPA</div>
         </div>
         <div class="gpa-header" style="margin-top:6px;">
           <span>Course</span><span>Grade</span><span>Credits</span><span></span>
@@ -1496,7 +1496,7 @@
     <section class="card" id="gpa" aria-label="GPA Calculator">
       <div class="gpa-result">
         <div class="gpa-val" id="gpaVal">—</div>
-        <div class="gpa-label">Weighted GPA (5.0 scale for AP)</div>
+        <div class="gpa-label">Weighted GPA</div>
       </div>
       <div class="gpa-rows" id="gpaRows"></div>
       <div class="btn-row">
@@ -1504,7 +1504,7 @@
         <button class="btn btn-ghost btn-sm" onclick="gpaClear()">Clear All</button>
       </div>
       <div style="font-size:.78rem;color:var(--muted);line-height:1.7;">
-        Regular &amp; Honors: 4.0 max · AP / IB: +1.0 bonus (5.0 max) · A=4.0 · B=3.0 · C=2.0 · D=1.0 · F=0
+        Regular &amp; Honors: 4.0 max · AP / IB: +1.0 bonus (5.0 max) · All classes weighted equally
       </div>
     </section>
   </div>
@@ -2090,12 +2090,6 @@ function makeGpaRow(containerId, calcFn) {
   });
   typeSel.addEventListener('change', calcFn);
 
-  const credInput = document.createElement('input');
-  credInput.type = 'number'; credInput.value = '3';
-  credInput.min = '0.5'; credInput.max = '12'; credInput.step = '0.5';
-  credInput.setAttribute('aria-label', 'Credits');
-  credInput.addEventListener('input', calcFn);
-
   const del = document.createElement('button');
   del.textContent = '✕';
   del.setAttribute('aria-label', 'Remove');
@@ -2104,7 +2098,6 @@ function makeGpaRow(containerId, calcFn) {
   row.appendChild(nameInput);
   row.appendChild(sel);
   row.appendChild(typeSel);
-  row.appendChild(credInput);
   row.appendChild(del);
 
   document.getElementById(containerId).appendChild(row);
@@ -2115,18 +2108,16 @@ function makeGpaRow(containerId, calcFn) {
 function gpaAddRow() { makeGpaRow('gpaRows', gpaCalc); }
 
 function gpaCalc() {
-  let total = 0, credits = 0;
+  let total = 0, count = 0;
   document.querySelectorAll('#gpaRows .gpa-row').forEach(r => {
     const sels  = r.querySelectorAll('select');
     const grade = sels[0].value;
     const isAP  = sels[1] && sels[1].value === 'ap';
-    const cred  = parseFloat(r.querySelectorAll('input')[1].value) || 3;
     if (gradeMap[grade] === undefined) return;
-    const pts = Math.min(gradeMap[grade] + (isAP ? 1.0 : 0), 5.0);
-    total   += pts * cred;
-    credits += cred;
+    total += Math.min(gradeMap[grade] + (isAP ? 1.0 : 0), 5.0);
+    count++;
   });
-  document.getElementById('gpaVal').textContent = credits > 0 ? (total / credits).toFixed(2) : '—';
+  document.getElementById('gpaVal').textContent = count > 0 ? (total / count).toFixed(2) : '—';
 }
 
 function gpaClear() {
@@ -3176,18 +3167,16 @@ function initDashboard() {
 function dashGpaAddRow() { makeGpaRow('dashGpaRows', dashGpaCalc); }
 
 function dashGpaCalc() {
-  let total = 0, credits = 0;
+  let total = 0, count = 0;
   document.querySelectorAll('#dashGpaRows .gpa-row').forEach(r => {
     const sels  = r.querySelectorAll('select');
     const grade = sels[0].value;
     const isAP  = sels[1] && sels[1].value === 'ap';
-    const cred  = parseFloat(r.querySelectorAll('input')[1].value) || 3;
     if (gradeMap[grade] === undefined) return;
-    const pts = Math.min(gradeMap[grade] + (isAP ? 1.0 : 0), 5.0);
-    total   += pts * cred;
-    credits += cred;
+    total += Math.min(gradeMap[grade] + (isAP ? 1.0 : 0), 5.0);
+    count++;
   });
-  document.getElementById('dashGpaVal').textContent = credits > 0 ? (total / credits).toFixed(2) : '—';
+  document.getElementById('dashGpaVal').textContent = count > 0 ? (total / count).toFixed(2) : '—';
 }
 
 function dashGpaClear() {

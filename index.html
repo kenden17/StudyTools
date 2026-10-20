@@ -1,4 +1,21 @@
 ﻿<!DOCTYPE html>
+
+</html>
+    <div class="card">
+      <div class="card-title">Request Help</div>
+      <div class="card-subtitle">Fill out the form below — your phone number goes only to CHS tutors</div>
+      <div id="hotlineFormWrap">
+        <div style="background:var(--surface2);border-radius:10px;padding:20px;text-align:center;color:var(--muted);font-size:.85rem;border:1.5px dashed var(--border);">
+          <div style="font-size:2rem;margin-bottom:8px;">📋</div>
+          <div style="font-weight:700;color:var(--text);margin-bottom:6px;">Google Form coming soon</div>
+          <div style="line-height:1.6;">The request form is being set up.<br>In the meantime email <a href="mailto:dilkhken28@stu.cedarburg.k12.wi.us" style="color:#6366f1;">dilkhken28@stu.cedarburg.k12.wi.us</a> directly with your name, phone number, and what you need help with.</div>
+        </div>
+        <!-- SWAP THIS PLACEHOLDER with your Google Form iframe once ready:
+        <iframe src="YOUR_GOOGLE_FORM_URL?embedded=true" width="100%" height="900" frameborder="0" marginheight="0" marginwidth="0" title="Homework Hotline Request Form" style="border-radius:10px;">Loading form...</iframe>
+        -->
+      </div>
+    </div>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
@@ -1169,32 +1186,10 @@
     .streak-dot.off{background:var(--surface2);border:1.5px solid var(--border);}
     .streak-dot.now{background:#f97316;color:#fff;box-shadow:0 0 0 3px rgba(249,115,22,.35);}
     .streak-msg{font-size:.82rem;color:var(--muted);line-height:1.55;background:var(--surface2);border-radius:10px;padding:12px 14px;border-left:3px solid #f97316;}
-
-    /* HOMEWORK HOTLINE */
-    .hotline-hero{background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:var(--radius);padding:24px 20px;color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
-    .hotline-hero-icon{font-size:3rem;line-height:1;}
-    .hotline-hero-title{font-size:1.4rem;font-weight:900;}
-    .hotline-hero-sub{font-size:.85rem;opacity:.88;max-width:360px;line-height:1.55;}
-    .hotline-status{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);border-radius:99px;padding:4px 12px;font-size:.75rem;font-weight:700;margin-top:4px;}
-    .hotline-status-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.35);}
-    .hotline-form{display:flex;flex-direction:column;gap:12px;}
-    .hotline-field{display:flex;flex-direction:column;gap:4px;}
-    .hotline-label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
-    .hotline-submit{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border:none;border-radius:var(--radius-sm);padding:14px 20px;font-size:1rem;font-weight:700;min-height:52px;cursor:pointer;touch-action:manipulation;transition:opacity var(--transition),transform var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;width:100%;}
-    .hotline-submit:hover{opacity:.9;} .hotline-submit:active{transform:scale(.97);} .hotline-submit:disabled{opacity:.5;cursor:not-allowed;}
-    .hotline-success{display:none;text-align:center;padding:24px 16px;background:var(--surface2);border-radius:var(--radius);border:1.5px solid var(--green);}
-    .hotline-success.show{display:block;}
-    .hotline-success-icon{font-size:3rem;margin-bottom:10px;}
-    .hotline-success-title{font-size:1.1rem;font-weight:800;color:var(--green);margin-bottom:6px;}
-    .hotline-success-sub{font-size:.85rem;color:var(--muted);line-height:1.6;}
-    .hotline-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    .hotline-info-card{background:var(--surface2);border-radius:var(--radius-sm);padding:14px;border:1.5px solid var(--border);display:flex;flex-direction:column;gap:4px;}
-    .hotline-info-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);}
-    .hotline-info-val{font-size:.9rem;font-weight:700;color:var(--text);}
-    .hotline-error{font-size:.8rem;color:var(--red);margin-top:4px;display:none;}
-    .hotline-error.show{display:block;}
 </style>
 </head>
+
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6JC6N3JF1J"></script>
 <script>
@@ -1220,7 +1215,6 @@
     <button class="nav-link" data-panel="notes">Notes</button>
     <button class="nav-link" data-panel="countdown">Countdowns</button>
     <button class="nav-link" data-panel="printables">Printables</button>
-    <button class="nav-link" data-panel="hotline" style="color:#6366f1;font-weight:700;">📞 Hotline</button>
   </div>
   <div class="nav-right">
     <button class="streak-badge" id="streakBadge" aria-label="Study streak" onclick="showPanel('home')">&#x1F525; <span id="streakBadgeNum">-</span></button>
@@ -1254,9 +1248,6 @@
     <div class="more-sheet-handle"></div>
     <div class="more-sheet-title">Study Tools</div>
     <div class="more-sheet-grid">
-      <button class="more-sheet-btn" data-panel="hotline" style="border-color:#6366f1;color:#6366f1;">
-        <span class="more-sheet-icon">📞</span> Hotline
-      </button>
       <button class="more-sheet-btn" data-panel="flashcards">
         <span class="more-sheet-icon">🃏</span> Flashcards
       </button>
@@ -1274,6 +1265,9 @@
       </button>
       <button class="more-sheet-btn" data-panel="essay">
         <span class="more-sheet-icon">✍️</span> Essay Outline
+      </button>
+      <button class="more-sheet-btn" data-panel="hotline" style="border-color:#6366f1;color:#6366f1;">
+        <span class="more-sheet-icon">📞</span> Hotline
       </button>
     </div>
     <hr class="more-sheet-divider" />
@@ -1886,109 +1880,6 @@
 <!-- PRINT STUDY GUIDE (hidden, rendered on demand) -->
 <div id="printFrame" style="display:none;" aria-hidden="true"></div>
 
-
-<!-- HOMEWORK HOTLINE -->
-<div class="page-panel" id="panel-hotline">
-  <div class="panel-hero">
-    <div class="panel-hero-inner">
-      <div class="panel-hero-title">📞 <span>Homework Hotline</span></div>
-      <div class="panel-hero-sub">Submit your number and a tutor will text or call you back — usually within the hour</div>
-    </div>
-  </div>
-  <div class="panel-inner single">
-
-    <!-- Hero -->
-    <div class="hotline-hero">
-      <div class="hotline-hero-icon">📞</div>
-      <div class="hotline-hero-title">Homework Hotline</div>
-      <div class="hotline-hero-sub">Stuck on a problem? Submit your phone number and what you need help with. A tutor will reach out ASAP.</div>
-      <div class="hotline-status"><div class="hotline-status-dot"></div>Tutors available — submit a request</div>
-    </div>
-
-    <!-- How it works -->
-    <div class="hotline-info-grid">
-      <div class="hotline-info-card">
-        <div class="hotline-info-label">Response time</div>
-        <div class="hotline-info-val">Usually &lt; 1 hour</div>
-      </div>
-      <div class="hotline-info-card">
-        <div class="hotline-info-label">How you'll hear back</div>
-        <div class="hotline-info-val">Text or call</div>
-      </div>
-      <div class="hotline-info-card">
-        <div class="hotline-info-label">Cost</div>
-        <div class="hotline-info-val">Free — peer tutors</div>
-      </div>
-      <div class="hotline-info-card">
-        <div class="hotline-info-label">Best for</div>
-        <div class="hotline-info-val">AP &amp; Honors courses</div>
-      </div>
-    </div>
-
-    <!-- Form -->
-    <div class="card">
-      <div class="card-title">Request Help</div>
-      <div class="card-subtitle">Your phone number is only shared with tutors — never posted publicly</div>
-
-      <div id="hotlineSuccess" class="hotline-success">
-        <div class="hotline-success-icon">✅</div>
-        <div class="hotline-success-title">Request sent!</div>
-        <div class="hotline-success-sub">A tutor has been notified and will text or call you back soon.<br>Hang tight — help is on the way.</div>
-        <button class="btn btn-ghost btn-sm" style="margin-top:14px;" onclick="hotlineReset()">Send another request</button>
-      </div>
-
-      <form class="hotline-form" id="hotlineForm" onsubmit="hotlineSubmit(event)">
-        <div class="hotline-field">
-          <label class="hotline-label" for="hlName">Your name</label>
-          <input type="text" id="hlName" placeholder="First name" autocomplete="given-name" required />
-        </div>
-        <div class="hotline-field">
-          <label class="hotline-label" for="hlPhone">Phone number</label>
-          <input type="tel" id="hlPhone" placeholder="(262) 555-0100" autocomplete="tel" required />
-          <div class="hotline-error" id="hlPhoneErr">Please enter a valid phone number.</div>
-        </div>
-        <div class="hotline-field">
-          <label class="hotline-label" for="hlSubject">Subject / course</label>
-          <select id="hlSubject" required>
-            <option value="" disabled selected>Select a course...</option>
-            <option value="AP Calculus BC">AP Calculus BC</option>
-            <option value="AP Statistics">AP Statistics</option>
-            <option value="AP U.S. History">AP U.S. History</option>
-            <option value="AP World History">AP World History</option>
-            <option value="AP English Language">AP English Language</option>
-            <option value="AP English Literature">AP English Literature</option>
-            <option value="AP Biology">AP Biology</option>
-            <option value="AP Chemistry">AP Chemistry</option>
-            <option value="AP Physics 1">AP Physics 1</option>
-            <option value="AP Env. Science">AP Env. Science</option>
-            <option value="AP Gov & Politics">AP Gov & Politics</option>
-            <option value="AP Psychology">AP Psychology</option>
-            <option value="AP Human Geography">AP Human Geography</option>
-            <option value="AP Computer Science A">AP Computer Science A</option>
-            <option value="Regular / Honors course">Regular / Honors course</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="hotline-field">
-          <label class="hotline-label" for="hlMessage">What do you need help with?</label>
-          <textarea id="hlMessage" rows="3" placeholder="e.g. Related rates problem, FRQ practice, understanding the DBQ format..." required></textarea>
-        </div>
-        <div class="hotline-field">
-          <label class="hotline-label" for="hlAvail">When are you available?</label>
-          <input type="text" id="hlAvail" placeholder="e.g. After 4pm today, or anytime this evening" />
-        </div>
-        <button type="submit" class="hotline-submit" id="hlSubmitBtn">
-          <span>📞</span> Send Request
-        </button>
-        <div class="hotline-error" id="hlSubmitErr"></div>
-        <div style="font-size:.72rem;color:var(--muted);line-height:1.55;text-align:center;">
-          By submitting you agree to share your phone number with CHS tutors for the purpose of homework help.
-        </div>
-      </form>
-    </div>
-
-  </div>
-</div>
 <footer>
   CHS Study Tools · Cedarburg Bulldogs 🐾 · Free &amp; private · No account needed ·
   <button style="background:none;border:none;color:var(--accent);font-size:.8rem;cursor:pointer;font-family:inherit;" onclick="showPanel('home')">Home</button>
@@ -4158,85 +4049,6 @@ window.addEventListener('beforeunload', function() {
   todoSave();
   noteSave();
 });
-
-// =========================================================
-// HOMEWORK HOTLINE
-// =========================================================
-var HOTLINE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
-var HOTLINE_EMAIL      = 'dilkhken28@stu.cedarburg.k12.wi.us';
-
-function hotlineSubmit(e) {
-  e.preventDefault();
-  var name    = document.getElementById('hlName').value.trim();
-  var phone   = document.getElementById('hlPhone').value.trim();
-  var subject = document.getElementById('hlSubject').value;
-  var message = document.getElementById('hlMessage').value.trim();
-  var avail   = document.getElementById('hlAvail').value.trim();
-  var errEl   = document.getElementById('hlSubmitErr');
-  var phoneErrEl = document.getElementById('hlPhoneErr');
-
-  // Basic phone validation
-  var cleanPhone = phone.replace(/\D/g, '');
-  if (cleanPhone.length < 10) {
-    phoneErrEl.classList.add('show');
-    document.getElementById('hlPhone').focus();
-    return;
-  }
-  phoneErrEl.classList.remove('show');
-  errEl.style.display = 'none';
-
-  var btn = document.getElementById('hlSubmitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span>⏳</span> Sending...';
-
-  var payload = { name: name, phone: phone, subject: subject, message: message, availability: avail, timestamp: new Date().toLocaleString() };
-
-  // Try Google Apps Script first; fall back to mailto if not configured
-  if (HOTLINE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-    // Fallback: open mailto link
-    var body = 'HOMEWORK HOTLINE REQUEST' +
-      '%0A%0AName: ' + encodeURIComponent(name) +
-      '%0APhone: ' + encodeURIComponent(phone) +
-      '%0ACourse: ' + encodeURIComponent(subject) +
-      '%0AMessage: ' + encodeURIComponent(message) +
-      '%0AAvailable: ' + encodeURIComponent(avail || 'Not specified') +
-      '%0ATime: ' + encodeURIComponent(new Date().toLocaleString());
-    window.location.href = 'mailto:' + HOTLINE_EMAIL +
-      '?subject=' + encodeURIComponent('Homework Hotline: ' + subject) +
-      '&body=' + body;
-    hotlineShowSuccess();
-    btn.disabled = false;
-    btn.innerHTML = '<span>📞</span> Send Request';
-    return;
-  }
-
-  // Google Apps Script fetch
-  fetch(HOTLINE_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).then(function() {
-    hotlineShowSuccess();
-  }).catch(function(err) {
-    errEl.textContent = 'Something went wrong. Try emailing ' + HOTLINE_EMAIL + ' directly.';
-    errEl.style.display = 'block';
-  }).finally(function() {
-    btn.disabled = false;
-    btn.innerHTML = '<span>📞</span> Send Request';
-  });
-}
-
-function hotlineShowSuccess() {
-  document.getElementById('hotlineForm').style.display = 'none';
-  document.getElementById('hotlineSuccess').classList.add('show');
-}
-
-function hotlineReset() {
-  document.getElementById('hotlineForm').reset();
-  document.getElementById('hotlineForm').style.display = 'flex';
-  document.getElementById('hotlineSuccess').classList.remove('show');
-}
 </script>
 </body>
 </html>

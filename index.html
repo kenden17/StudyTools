@@ -1,21 +1,4 @@
 ﻿<!DOCTYPE html>
-
-</html>
-    <div class="card">
-      <div class="card-title">Request Help</div>
-      <div class="card-subtitle">Fill out the form below — your phone number goes only to CHS tutors</div>
-      <div id="hotlineFormWrap">
-        <div style="background:var(--surface2);border-radius:10px;padding:20px;text-align:center;color:var(--muted);font-size:.85rem;border:1.5px dashed var(--border);">
-          <div style="font-size:2rem;margin-bottom:8px;">📋</div>
-          <div style="font-weight:700;color:var(--text);margin-bottom:6px;">Google Form coming soon</div>
-          <div style="line-height:1.6;">The request form is being set up.<br>In the meantime email <a href="mailto:dilkhken28@stu.cedarburg.k12.wi.us" style="color:#6366f1;">dilkhken28@stu.cedarburg.k12.wi.us</a> directly with your name, phone number, and what you need help with.</div>
-        </div>
-        <!-- SWAP THIS PLACEHOLDER with your Google Form iframe once ready:
-        <iframe src="YOUR_GOOGLE_FORM_URL?embedded=true" width="100%" height="900" frameborder="0" marginheight="0" marginwidth="0" title="Homework Hotline Request Form" style="border-radius:10px;">Loading form...</iframe>
-        -->
-      </div>
-    </div>
-<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
@@ -1186,10 +1169,22 @@
     .streak-dot.off{background:var(--surface2);border:1.5px solid var(--border);}
     .streak-dot.now{background:#f97316;color:#fff;box-shadow:0 0 0 3px rgba(249,115,22,.35);}
     .streak-msg{font-size:.82rem;color:var(--muted);line-height:1.55;background:var(--surface2);border-radius:10px;padding:12px 14px;border-left:3px solid #f97316;}
+
+    /* HOMEWORK HOTLINE */
+    .hotline-hero{background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:var(--radius);padding:24px 20px;color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
+    .hotline-hero-icon{font-size:3rem;line-height:1;}
+    .hotline-hero-title{font-size:1.4rem;font-weight:900;}
+    .hotline-hero-sub{font-size:.85rem;opacity:.88;max-width:420px;line-height:1.55;}
+    .hotline-status{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);border-radius:99px;padding:4px 12px;font-size:.75rem;font-weight:700;margin-top:4px;}
+    .hotline-status-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.35);}
+    .hotline-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .hotline-info-card{background:var(--surface2);border-radius:var(--radius-sm);padding:14px;border:1.5px solid var(--border);display:flex;flex-direction:column;gap:4px;}
+    .hotline-info-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);}
+    .hotline-info-val{font-size:.9rem;font-weight:700;color:var(--text);}
+    .hotline-iframe{width:100%;min-height:740px;border:none;border-radius:10px;display:block;}
+    @media(max-width:480px){.hotline-info-grid{grid-template-columns:1fr;} .hotline-iframe{min-height:900px;}}
 </style>
 </head>
-
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6JC6N3JF1J"></script>
 <script>
@@ -1215,6 +1210,7 @@
     <button class="nav-link" data-panel="notes">Notes</button>
     <button class="nav-link" data-panel="countdown">Countdowns</button>
     <button class="nav-link" data-panel="printables">Printables</button>
+    <button class="nav-link" data-panel="hotline" style="color:#6366f1;font-weight:700;">&#x1F4DE; Hotline</button>
   </div>
   <div class="nav-right">
     <button class="streak-badge" id="streakBadge" aria-label="Study streak" onclick="showPanel('home')">&#x1F525; <span id="streakBadgeNum">-</span></button>
@@ -1267,7 +1263,7 @@
         <span class="more-sheet-icon">✍️</span> Essay Outline
       </button>
       <button class="more-sheet-btn" data-panel="hotline" style="border-color:#6366f1;color:#6366f1;">
-        <span class="more-sheet-icon">📞</span> Hotline
+        <span class="more-sheet-icon">&#x1F4DE;</span> Hotline
       </button>
     </div>
     <hr class="more-sheet-divider" />
@@ -1880,6 +1876,46 @@
 <!-- PRINT STUDY GUIDE (hidden, rendered on demand) -->
 <div id="printFrame" style="display:none;" aria-hidden="true"></div>
 
+
+<!-- HOMEWORK HOTLINE -->
+<div class="page-panel" id="panel-hotline">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">&#x1F4DE; <span>Homework Hotline</span></div>
+      <div class="panel-hero-sub">Get help from a peer tutor — fill out the form and they will text or call you back</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+
+    <div class="hotline-hero">
+      <div class="hotline-hero-icon">&#x1F4DE;</div>
+      <div class="hotline-hero-title">Homework Hotline</div>
+      <div class="hotline-hero-sub">Stuck on a problem? Submit your phone number below and a CHS tutor will reach out ASAP.</div>
+      <div class="hotline-status"><div class="hotline-status-dot"></div>Tutors available &mdash; submit a request</div>
+    </div>
+
+    <div class="hotline-info-grid">
+      <div class="hotline-info-card"><div class="hotline-info-label">Response time</div><div class="hotline-info-val">Usually &lt; 1 hour</div></div>
+      <div class="hotline-info-card"><div class="hotline-info-label">How you hear back</div><div class="hotline-info-val">Text or call</div></div>
+      <div class="hotline-info-card"><div class="hotline-info-label">Cost</div><div class="hotline-info-val">Free &mdash; peer tutors</div></div>
+      <div class="hotline-info-card"><div class="hotline-info-label">Best for</div><div class="hotline-info-val">AP &amp; Honors</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Request Help</div>
+      <div class="card-subtitle">Your phone number is only shared with CHS tutors &mdash; never posted publicly</div>
+      <iframe
+        class="hotline-iframe"
+        src="https://docs.google.com/forms/d/e/1FAIpQLSftqryqSBoGu2MqZ0Lzz7LxXv5sBZM_smnvweTKJJwk0ByoNw/viewform?embedded=true"
+        title="Homework Hotline Request Form"
+        aria-label="Homework Hotline request form"
+        loading="lazy">
+        Loading form&hellip;
+      </iframe>
+    </div>
+
+  </div>
+</div>
 <footer>
   CHS Study Tools · Cedarburg Bulldogs 🐾 · Free &amp; private · No account needed ·
   <button style="background:none;border:none;color:var(--accent);font-size:.8rem;cursor:pointer;font-family:inherit;" onclick="showPanel('home')">Home</button>

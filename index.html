@@ -1169,6 +1169,30 @@
     .streak-dot.off{background:var(--surface2);border:1.5px solid var(--border);}
     .streak-dot.now{background:#f97316;color:#fff;box-shadow:0 0 0 3px rgba(249,115,22,.35);}
     .streak-msg{font-size:.82rem;color:var(--muted);line-height:1.55;background:var(--surface2);border-radius:10px;padding:12px 14px;border-left:3px solid #f97316;}
+
+    /* HOMEWORK HOTLINE */
+    .hotline-hero{background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:var(--radius);padding:24px 20px;color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
+    .hotline-hero-icon{font-size:3rem;line-height:1;}
+    .hotline-hero-title{font-size:1.4rem;font-weight:900;}
+    .hotline-hero-sub{font-size:.85rem;opacity:.88;max-width:360px;line-height:1.55;}
+    .hotline-status{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);border-radius:99px;padding:4px 12px;font-size:.75rem;font-weight:700;margin-top:4px;}
+    .hotline-status-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.35);}
+    .hotline-form{display:flex;flex-direction:column;gap:12px;}
+    .hotline-field{display:flex;flex-direction:column;gap:4px;}
+    .hotline-label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+    .hotline-submit{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border:none;border-radius:var(--radius-sm);padding:14px 20px;font-size:1rem;font-weight:700;min-height:52px;cursor:pointer;touch-action:manipulation;transition:opacity var(--transition),transform var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;width:100%;}
+    .hotline-submit:hover{opacity:.9;} .hotline-submit:active{transform:scale(.97);} .hotline-submit:disabled{opacity:.5;cursor:not-allowed;}
+    .hotline-success{display:none;text-align:center;padding:24px 16px;background:var(--surface2);border-radius:var(--radius);border:1.5px solid var(--green);}
+    .hotline-success.show{display:block;}
+    .hotline-success-icon{font-size:3rem;margin-bottom:10px;}
+    .hotline-success-title{font-size:1.1rem;font-weight:800;color:var(--green);margin-bottom:6px;}
+    .hotline-success-sub{font-size:.85rem;color:var(--muted);line-height:1.6;}
+    .hotline-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .hotline-info-card{background:var(--surface2);border-radius:var(--radius-sm);padding:14px;border:1.5px solid var(--border);display:flex;flex-direction:column;gap:4px;}
+    .hotline-info-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);}
+    .hotline-info-val{font-size:.9rem;font-weight:700;color:var(--text);}
+    .hotline-error{font-size:.8rem;color:var(--red);margin-top:4px;display:none;}
+    .hotline-error.show{display:block;}
 </style>
 </head>
 <!-- Google tag (gtag.js) -->

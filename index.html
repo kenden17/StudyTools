@@ -1183,6 +1183,23 @@
     .hotline-info-val{font-size:.9rem;font-weight:700;color:var(--text);}
     .hotline-iframe{width:100%;min-height:740px;border:none;border-radius:10px;display:block;}
     @media(max-width:480px){.hotline-info-grid{grid-template-columns:1fr;} .hotline-iframe{min-height:900px;}}
+
+    /* PROJECTILE CALCULATOR */
+    .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .proj-field{display:flex;flex-direction:column;gap:4px;}
+    .proj-label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+    .proj-unit{font-size:.72rem;color:var(--muted);margin-top:2px;}
+    .proj-canvas-wrap{background:var(--surface2);border-radius:12px;border:1.5px solid var(--border);overflow:hidden;position:relative;}
+    .proj-canvas{display:block;width:100%;height:auto;}
+    .proj-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;}
+    .proj-result-card{background:var(--surface2);border-radius:10px;padding:12px 14px;border:1.5px solid var(--border);}
+    .proj-result-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px;}
+    .proj-result-val{font-size:1.25rem;font-weight:900;color:var(--accent);}
+    .proj-result-unit{font-size:.7rem;color:var(--muted);margin-top:1px;}
+    .proj-steps{display:flex;flex-direction:column;gap:8px;}
+    .proj-step{background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:.82rem;line-height:1.6;border-left:3px solid var(--accent);}
+    .proj-step code{background:var(--border);border-radius:4px;padding:1px 5px;font-size:.8rem;}
+    @media(max-width:480px){.proj-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -1274,6 +1291,9 @@
       </button>
       <button class="more-sheet-btn" data-panel="converter">
         <span class="more-sheet-icon">🔢</span> Converter
+      </button>
+      <button class="more-sheet-btn" data-panel="projectile">
+        <span class="more-sheet-icon">&#x1F680;</span> Projectile
       </button>
       <button class="more-sheet-btn" data-panel="periodic">
         <span class="more-sheet-icon">⚗️</span> Periodic Table
@@ -1912,6 +1932,102 @@
         loading="lazy">
         Loading form&hellip;
       </iframe>
+    </div>
+
+  </div>
+</div>
+
+<!-- PROJECTILE CALCULATOR -->
+<div class="page-panel" id="panel-projectile">
+  <div class="panel-hero">
+    <div class="panel-hero-inner">
+      <div class="panel-hero-title">&#x1F680; Projectile Calculator</div>
+      <div class="panel-hero-sub">Enter launch conditions &mdash; get full trajectory analysis with a live diagram</div>
+    </div>
+  </div>
+  <div class="panel-inner single">
+
+    <!-- Inputs -->
+    <div class="card">
+      <div class="card-title">Launch Conditions</div>
+      <div class="proj-grid">
+        <div class="proj-field">
+          <label class="proj-label" for="projV0">Initial Speed</label>
+          <input type="number" id="projV0" placeholder="20" min="0" max="1000" step="0.1" oninput="projCalc()" />
+          <div class="proj-unit">m/s</div>
+        </div>
+        <div class="proj-field">
+          <label class="proj-label" for="projAngle">Launch Angle</label>
+          <input type="number" id="projAngle" placeholder="45" min="0" max="90" step="0.5" oninput="projCalc()" />
+          <div class="proj-unit">degrees (0&ndash;90)</div>
+        </div>
+        <div class="proj-field">
+          <label class="proj-label" for="projH0">Initial Height</label>
+          <input type="number" id="projH0" placeholder="0" min="0" max="10000" step="0.1" oninput="projCalc()" />
+          <div class="proj-unit">m (0 = ground level)</div>
+        </div>
+        <div class="proj-field">
+          <label class="proj-label" for="projG">Gravity</label>
+          <select id="projG" onchange="projCalc()">
+            <option value="9.8">9.8 m/s&sup2; &mdash; Earth</option>
+            <option value="9.81">9.81 m/s&sup2; &mdash; Earth (precise)</option>
+            <option value="1.62">1.62 m/s&sup2; &mdash; Moon</option>
+            <option value="3.72">3.72 m/s&sup2; &mdash; Mars</option>
+            <option value="24.8">24.8 m/s&sup2; &mdash; Jupiter</option>
+          </select>
+          <div class="proj-unit">gravitational acceleration</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canvas diagram -->
+    <div class="proj-canvas-wrap card" style="padding:12px;">
+      <div class="card-title" style="margin-bottom:8px;">Trajectory Diagram</div>
+      <canvas class="proj-canvas" id="projCanvas" width="600" height="300" aria-label="Projectile trajectory diagram"></canvas>
+      <div style="font-size:.7rem;color:var(--muted);text-align:center;margin-top:6px;" id="projCanvasLabel">Enter values above to see the trajectory</div>
+    </div>
+
+    <!-- Results -->
+    <div class="card" id="projResultsCard" style="display:none;">
+      <div class="card-title">Results</div>
+      <div class="proj-results">
+        <div class="proj-result-card">
+          <div class="proj-result-label">Max Height</div>
+          <div class="proj-result-val" id="projMaxH">—</div>
+          <div class="proj-result-unit">meters above launch</div>
+        </div>
+        <div class="proj-result-card">
+          <div class="proj-result-label">Range</div>
+          <div class="proj-result-val" id="projRange">—</div>
+          <div class="proj-result-unit">meters horizontal</div>
+        </div>
+        <div class="proj-result-card">
+          <div class="proj-result-label">Flight Time</div>
+          <div class="proj-result-val" id="projTime">—</div>
+          <div class="proj-result-unit">seconds</div>
+        </div>
+        <div class="proj-result-card">
+          <div class="proj-result-label">Vx (horizontal)</div>
+          <div class="proj-result-val" id="projVx">—</div>
+          <div class="proj-result-unit">m/s (constant)</div>
+        </div>
+        <div class="proj-result-card">
+          <div class="proj-result-label">Vy initial</div>
+          <div class="proj-result-val" id="projVy0">—</div>
+          <div class="proj-result-unit">m/s upward</div>
+        </div>
+        <div class="proj-result-card">
+          <div class="proj-result-label">Impact Speed</div>
+          <div class="proj-result-val" id="projVf">—</div>
+          <div class="proj-result-unit">m/s at landing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step-by-step work -->
+    <div class="card" id="projStepsCard" style="display:none;">
+      <div class="card-title">Step-by-Step Solution</div>
+      <div class="proj-steps" id="projSteps"></div>
     </div>
 
   </div>
@@ -4085,6 +4201,243 @@ window.addEventListener('beforeunload', function() {
   todoSave();
   noteSave();
 });
+
+// =========================================================
+// PROJECTILE MOTION CALCULATOR
+// =========================================================
+function projCalc() {
+  var v0    = parseFloat(document.getElementById('projV0').value);
+  var angle = parseFloat(document.getElementById('projAngle').value);
+  var h0    = parseFloat(document.getElementById('projH0').value) || 0;
+  var g     = parseFloat(document.getElementById('projG').value) || 9.8;
+
+  if (isNaN(v0) || isNaN(angle) || v0 < 0 || angle < 0 || angle > 90) {
+    projDrawEmpty();
+    return;
+  }
+
+  var rad = angle * Math.PI / 180;
+  var vx  = v0 * Math.cos(rad);
+  var vy0 = v0 * Math.sin(rad);
+
+  // Time to peak: vy0 / g
+  var tPeak = vy0 / g;
+
+  // Max height above launch
+  var hPeak = h0 + vy0 * tPeak - 0.5 * g * tPeak * tPeak;
+
+  // Total flight time (quadratic: h0 + vy0*t - 0.5*g*t^2 = 0)
+  // 0.5g*t^2 - vy0*t - h0 = 0
+  var disc = vy0 * vy0 + 2 * g * h0;
+  var tFlight = (vy0 + Math.sqrt(disc)) / g;
+
+  // Range
+  var range = vx * tFlight;
+
+  // Impact speed
+  var vyFinal = vy0 - g * tFlight;
+  var vFinal  = Math.sqrt(vx * vx + vyFinal * vyFinal);
+
+  // Display results
+  var r = function(n) { return Math.round(n * 100) / 100; };
+  document.getElementById('projMaxH').textContent  = r(hPeak - h0);
+  document.getElementById('projRange').textContent = r(range);
+  document.getElementById('projTime').textContent  = r(tFlight);
+  document.getElementById('projVx').textContent    = r(vx);
+  document.getElementById('projVy0').textContent   = r(vy0);
+  document.getElementById('projVf').textContent    = r(vFinal);
+
+  document.getElementById('projResultsCard').style.display = '';
+  document.getElementById('projStepsCard').style.display   = '';
+
+  // Steps
+  var steps = document.getElementById('projSteps');
+  steps.innerHTML = [
+    '<div class="proj-step"><strong>1. Decompose velocity</strong><br>Vx = v&#8320; &times; cos(&theta;) = <code>' + r(v0) + ' &times; cos(' + angle + '&deg;) = ' + r(vx) + ' m/s</code><br>Vy&#8320; = v&#8320; &times; sin(&theta;) = <code>' + r(v0) + ' &times; sin(' + angle + '&deg;) = ' + r(vy0) + ' m/s</code></div>',
+    '<div class="proj-step"><strong>2. Time to peak</strong><br>t&#7525;&#7497;&#7490;&#7478; = Vy&#8320; / g = <code>' + r(vy0) + ' / ' + g + ' = ' + r(tPeak) + ' s</code></div>',
+    '<div class="proj-step"><strong>3. Maximum height</strong><br>h&#7504;&#7490;&#7490; = h&#8320; + Vy&#8320;&sup2; / (2g) = <code>' + r(h0) + ' + ' + r(vy0*vy0) + ' / (2 &times; ' + g + ') = ' + r(hPeak) + ' m</code> (above ground)</div>',
+    '<div class="proj-step"><strong>4. Total flight time</strong><br>Solve 0 = h&#8320; + Vy&#8320;t &minus; &frac12;gt&sup2; &rarr; <code>t = (Vy&#8320; + &radic;(Vy&#8320;&sup2; + 2gh&#8320;)) / g = ' + r(tFlight) + ' s</code></div>',
+    '<div class="proj-step"><strong>5. Horizontal range</strong><br>R = Vx &times; t = <code>' + r(vx) + ' &times; ' + r(tFlight) + ' = ' + r(range) + ' m</code></div>',
+    '<div class="proj-step"><strong>6. Impact speed</strong><br>Vy&#7522; = Vy&#8320; &minus; g&times;t = <code>' + r(vy0) + ' &minus; ' + g + ' &times; ' + r(tFlight) + ' = ' + r(vyFinal) + ' m/s</code><br>|v&#7522;| = &radic;(Vx&sup2; + Vy&#7522;&sup2;) = <code>&radic;(' + r(vx*vx) + ' + ' + r(vyFinal*vyFinal) + ') = ' + r(vFinal) + ' m/s</code></div>'
+  ].join('');
+
+  // Draw trajectory
+  projDraw(vx, vy0, h0, g, tFlight, tPeak, hPeak, range);
+}
+
+function projDraw(vx, vy0, h0, g, tFlight, tPeak, hPeak, range) {
+  var canvas = document.getElementById('projCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var pad = { top: 36, right: 20, bottom: 48, left: 52 };
+  var plotW = W - pad.left - pad.right;
+  var plotH = H - pad.top  - pad.bottom;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Theme detection
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var colBg    = isDark ? '#1c1409' : '#faf8f5';
+  var colGrid  = isDark ? '#3a2a18' : '#e8ddd0';
+  var colText  = isDark ? '#a89070' : '#6b6257';
+  var colPath  = '#e8650a';
+  var colPeak  = '#10b981';
+  var colGnd   = isDark ? '#3a2a18' : '#d1c5b0';
+
+  // Background
+  ctx.fillStyle = colBg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Scale: x from 0 to range, y from 0 to hPeak (or h0 if angle=0)
+  var yMax = Math.max(hPeak, h0) * 1.15 + 1;
+  var xMax = range * 1.08 + 1;
+
+  var toX = function(x) { return pad.left + (x / xMax) * plotW; };
+  var toY = function(y) { return pad.top + plotH - (y / yMax) * plotH; };
+
+  // Grid lines
+  ctx.strokeStyle = colGrid;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 4]);
+  for (var i = 0; i <= 4; i++) {
+    var gx = pad.left + (i / 4) * plotW;
+    var gy = pad.top  + (i / 4) * plotH;
+    ctx.beginPath(); ctx.moveTo(gx, pad.top);    ctx.lineTo(gx, pad.top + plotH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.left, gy);   ctx.lineTo(pad.left + plotW, gy); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Ground line
+  ctx.strokeStyle = colGnd;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(pad.left, toY(0));
+  ctx.lineTo(pad.left + plotW, toY(0));
+  ctx.stroke();
+
+  // Axes
+  ctx.strokeStyle = colText;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(pad.left, pad.top);
+  ctx.lineTo(pad.left, pad.top + plotH);
+  ctx.lineTo(pad.left + plotW, pad.top + plotH);
+  ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle = colText;
+  ctx.font = '11px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Range (m)', pad.left + plotW / 2, H - 8);
+  ctx.save();
+  ctx.translate(14, pad.top + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Height (m)', 0, 0);
+  ctx.restore();
+
+  // Tick values
+  ctx.font = '10px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  for (var i = 0; i <= 4; i++) {
+    var xVal = (xMax * i / 4);
+    var yVal = (yMax * (4 - i) / 4);
+    ctx.fillStyle = colText;
+    ctx.fillText(Math.round(xVal * 10) / 10, toX(xVal), pad.top + plotH + 16);
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(yVal * 10) / 10, pad.left - 6, toY(yVal) + 4);
+    ctx.textAlign = 'center';
+  }
+
+  // Trajectory path
+  var steps = 200;
+  ctx.strokeStyle = colPath;
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  for (var i = 0; i <= steps; i++) {
+    var t  = (tFlight * i) / steps;
+    var px = vx * t;
+    var py = h0 + vy0 * t - 0.5 * g * t * t;
+    if (py < 0) break;
+    var cx2 = toX(px), cy2 = toY(py);
+    if (i === 0) ctx.moveTo(cx2, cy2); else ctx.lineTo(cx2, cy2);
+  }
+  ctx.stroke();
+
+  // Launch arrow
+  var arrowLen = 28;
+  var rad = Math.atan2(vy0, vx);
+  var ax = toX(0), ay = toY(h0);
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(ax, ay);
+  ctx.lineTo(ax + arrowLen * Math.cos(rad), ay - arrowLen * Math.sin(rad));
+  ctx.stroke();
+  // arrowhead
+  var hRad = Math.atan2(-Math.sin(rad), Math.cos(rad));
+  ctx.fillStyle = '#3b82f6';
+  ctx.beginPath();
+  var ex = ax + arrowLen * Math.cos(rad), ey = ay - arrowLen * Math.sin(rad);
+  ctx.moveTo(ex, ey);
+  ctx.lineTo(ex - 8 * Math.cos(rad - 0.4), ey + 8 * Math.sin(rad - 0.4));
+  ctx.lineTo(ex - 8 * Math.cos(rad + 0.4), ey + 8 * Math.sin(rad + 0.4));
+  ctx.closePath(); ctx.fill();
+
+  // Peak dot + label
+  ctx.fillStyle = colPeak;
+  ctx.beginPath();
+  ctx.arc(toX(vx * tPeak), toY(hPeak), 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = colPeak;
+  ctx.font = 'bold 11px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Peak ' + (Math.round((hPeak - h0) * 10) / 10) + 'm', toX(vx * tPeak), toY(hPeak) - 10);
+
+  // Launch dot
+  ctx.fillStyle = '#3b82f6';
+  ctx.beginPath();
+  ctx.arc(toX(0), toY(h0), 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Landing dot
+  ctx.fillStyle = colPath;
+  ctx.beginPath();
+  ctx.arc(toX(range), toY(0), 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = colText;
+  ctx.font = '11px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(Math.round(range * 10) / 10 + 'm', toX(range), toY(0) + 22);
+
+  document.getElementById('projCanvasLabel').textContent =
+    'Blue = launch vector  |  Orange = trajectory  |  Green = peak  |  Dots = key points';
+}
+
+function projDrawEmpty() {
+  var canvas = document.getElementById('projCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = isDark ? '#1c1409' : '#faf8f5';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = isDark ? '#a89070' : '#6b6257';
+  ctx.font = '14px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Enter speed and angle above to see the trajectory', canvas.width / 2, canvas.height / 2);
+}
+
+// Redraw on theme change
+var _projOrigSetTheme = window.setTheme;
+if (typeof setTheme === 'function') {
+  window.setTheme = function(dark) {
+    _projOrigSetTheme(dark);
+    var v0 = document.getElementById('projV0');
+    if (v0 && v0.value) projCalc(); else projDrawEmpty();
+  };
+}
 </script>
 </body>
 </html>
